@@ -1,0 +1,20 @@
+
+###############################################################################
+
+
+	Top-Down Spaceships
+	by arin48 on opengameart.org
+
+			------------------------------
+
+	License (BB-BY 4.0)
+	https://creativecommons.org/licenses/by/4.0/
+
+			------------------------------
+
+	Downloaded at: https://opengameart.org/content/top-down-spaceships
+	Source: https://github.com/ArindamHans/spaceship-controller
+      
+      Modified in Krita from .svg file to .png file
+
+###############################################################################
