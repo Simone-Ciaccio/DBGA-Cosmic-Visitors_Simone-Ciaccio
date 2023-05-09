@@ -14,13 +14,14 @@ public class Enemy : MonoBehaviour, IDamageable, IShooter
         get => EnemyScriptable.EnemyDamage;
         set => Damage = EnemyScriptable.EnemyDamage;
     }
+
     public List<EnemyScriptable> Enemies = new List<EnemyScriptable>();
     public GameObject bulletPrefab;
     public EnemyScriptable EnemyScriptable;
     public bool HasCollider = false;
-    public int ShotMinAngle, ShotMaxAngle;
-    
 
+    private int numberOfBullets;
+    private int shotMinAngle, shotMaxAngle;
     private SpriteRenderer spriteRenderer;
     private SpriteRenderer bulletRenderer;
     private Vector3 bulletSpawnOffset = Vector3.down;
@@ -32,6 +33,9 @@ public class Enemy : MonoBehaviour, IDamageable, IShooter
         spriteRenderer = GetComponent<SpriteRenderer>();
         EnemyScriptable = Helper.RandomArrayValue(Enemies);
         spriteRenderer.sprite = EnemyScriptable.EnemySprite;
+        numberOfBullets = EnemyScriptable.NumberOfBullets;
+        shotMinAngle = EnemyScriptable.MinShotAngle;
+        shotMaxAngle = EnemyScriptable.MaxShotAngle;
         timeBetweenShots = EnemyScriptable.TimeBetweenShots;
     }
 
@@ -47,26 +51,21 @@ public class Enemy : MonoBehaviour, IDamageable, IShooter
     public void Shoot()
     {
         timer = timeBetweenShots;
-        int numberOfBullets;
-        if (EnemyScriptable.TripleShot)
+
+        if (EnemyScriptable.EnemyBulletSprite == null ||
+            EnemyScriptable.EnemyBulletPrefab == null )
         {
-            numberOfBullets = 3;
-            for (int i = 0; i < numberOfBullets; i++)
-            {
-                GameObject bulletGO = Instantiate(bulletPrefab, transform.position + bulletSpawnOffset, Quaternion.identity);
-                Bullet bullet = bulletGO.GetComponent<Bullet>();
-                InitBullet(bulletGO);
-                float angleToShoot = ShotMinAngle - (i * ShotMinAngle);
-                bullet.SetBulletDirection(Vector3.down, angleToShoot);
-            }
+            return;
         }
-        else
+
+        float angleStep = (shotMaxAngle - shotMinAngle) / numberOfBullets;
+        for(int i = 0; i < numberOfBullets; i++)
         {
             GameObject bulletGO = Instantiate(bulletPrefab, transform.position + bulletSpawnOffset, Quaternion.identity);
-            InitBullet(bulletGO);
-
             Bullet bullet = bulletGO.GetComponent<Bullet>();
-            bullet.BulletDirection = Vector3.down;
+            InitBullet(bulletGO);
+            float angleToShoot = angleStep - (i * angleStep);
+            bullet.SetBulletDirection(Vector3.down, angleToShoot);
         }
     }
 

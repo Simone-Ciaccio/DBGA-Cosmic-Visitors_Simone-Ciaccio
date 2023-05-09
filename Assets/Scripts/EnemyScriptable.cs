@@ -11,5 +11,7 @@ public class EnemyScriptable : ScriptableObject
     public GameObject EnemyBulletPrefab;
     public Sprite EnemyBulletSprite;
     public float TimeBetweenShots;
-    public bool TripleShot;
+    public int NumberOfBullets;
+    public int MinShotAngle;
+    public int MaxShotAngle;
 }

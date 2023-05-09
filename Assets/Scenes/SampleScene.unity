@@ -414,6 +414,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 505ff33feaa6f0e439df09af66c5653a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  PlayerHealth: 3
+  PlayerDamage: 1
   BulletPrefab: {fileID: 1009538351760812735, guid: 19737653c1799df41a90f357216a744e, type: 3}
   BulletSprite: {fileID: 1791733142, guid: f706babab9dc9b249a8b05fb523216ca, type: 3}
   TimeBetweenBullets: 1

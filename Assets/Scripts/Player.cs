@@ -5,8 +5,20 @@ using UnityEngine;
 
 public class Player : MonoBehaviour, IDamageable, IShooter
 {
-    public int Health { get; set; }
-    public int Damage { get; set; }
+    public int PlayerHealth;
+    public int PlayerDamage;
+
+    public int Health 
+    {
+        get => PlayerHealth;
+        set => Health = PlayerHealth;
+    }
+    public int Damage 
+    {
+        get => PlayerDamage;
+        set => Damage = PlayerDamage;
+    }
+
     public GameObject BulletPrefab;
     public Sprite BulletSprite;
     public float TimeBetweenBullets;

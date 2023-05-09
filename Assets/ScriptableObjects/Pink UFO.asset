@@ -18,4 +18,6 @@ MonoBehaviour:
   EnemyBulletPrefab: {fileID: 1009538351760812735, guid: 19737653c1799df41a90f357216a744e, type: 3}
   EnemyBulletSprite: {fileID: -1857480278, guid: f706babab9dc9b249a8b05fb523216ca, type: 3}
   TimeBetweenShots: 2
-  TripleShot: 1
+  NumberOfBullets: 3
+  MinShotAngle: -30
+  MaxShotAngle: 30
