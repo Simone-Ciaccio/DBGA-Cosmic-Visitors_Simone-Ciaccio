@@ -20,13 +20,29 @@ public class Enemy : MonoBehaviour, IDamageable, IShooter
     public EnemyScriptable EnemyScriptable;
     public bool HasCollider = false;
 
+    private ENEMY_MOVE_STATE  moveState = 0;
+    private float moveHorizontalAmount = 0.5f;
+    private float moveVerticalAmount = 0.3f;
+    private float moveTimer = 1.5f;
+    private bool moveRight = true;
+
     private int numberOfBullets;
     private int shotMinAngle, shotMaxAngle;
-    private SpriteRenderer spriteRenderer;
-    private SpriteRenderer bulletRenderer;
     private Vector3 bulletSpawnOffset = Vector3.down;
     private float timeBetweenShots;
-    private float timer;
+    private float shootTimer;
+
+    private enum ENEMY_MOVE_STATE
+    {
+        NONE = -1,
+        MOVE_RIGHT = 0,
+        MOVE_DOWN = 1,
+        MOVE_LEFT = 2,
+    }
+
+    private SpriteRenderer spriteRenderer;
+    private SpriteRenderer bulletRenderer;
+
 
     private void Awake()
     {
@@ -41,35 +57,85 @@ public class Enemy : MonoBehaviour, IDamageable, IShooter
 
     private void Update()
     {
-        timer -= Time.deltaTime;
-        if (timer <= 0)
+        shootTimer -= Time.deltaTime;
+        moveTimer -= Time.deltaTime;
+
+        if (moveTimer <= 0)
+        {
+            Move();
+        }
+
+        if (shootTimer <= 0)
         {
             Shoot();
         }
     }
 
+    private void Move()
+    {
+        moveTimer = 0.5f;
+
+        float boundRight = 8;
+        float boundLeft = -8;
+
+        if (transform.position.x >= boundRight)
+        {
+            transform.position = new Vector3(boundRight - 0.1f, transform.position.y, transform.position.z);
+            moveState = ENEMY_MOVE_STATE.MOVE_DOWN;
+            moveRight = false;
+        }
+        else if (transform.position.x <= boundLeft)
+        {
+            transform.position = new Vector3(boundLeft + 0.1f, transform.position.y, transform.position.z);
+            moveState = ENEMY_MOVE_STATE.MOVE_DOWN;
+            moveRight = true;
+        }
+
+        switch (moveState)
+        {
+            case ENEMY_MOVE_STATE.NONE:
+                break;
+
+            case ENEMY_MOVE_STATE.MOVE_RIGHT:
+                transform.position += new Vector3 ( moveHorizontalAmount, 0, 0);
+                break;
+
+            case ENEMY_MOVE_STATE.MOVE_LEFT:
+                transform.position += new Vector3 ( -moveHorizontalAmount, 0, 0);
+                break;
+
+            case ENEMY_MOVE_STATE.MOVE_DOWN:
+                transform.position += new Vector3( 0, -moveVerticalAmount, 0);
+
+                if (moveRight)
+                {
+                    moveState = ENEMY_MOVE_STATE.MOVE_RIGHT;
+                }
+                else if (!moveRight)
+                {
+                    moveState = ENEMY_MOVE_STATE.MOVE_LEFT;
+                }
+
+                break;
+        }
+    }
+
     public void Shoot()
     {
-        timer = timeBetweenShots;
-
-        if (EnemyScriptable.EnemyBulletSprite == null ||
-            EnemyScriptable.EnemyBulletPrefab == null )
-        {
-            return;
-        }
+        shootTimer = timeBetweenShots;
 
         float angleStep = (shotMaxAngle - shotMinAngle) / numberOfBullets;
         for(int i = 0; i < numberOfBullets; i++)
         {
             GameObject bulletGO = Instantiate(bulletPrefab, transform.position + bulletSpawnOffset, Quaternion.identity);
             Bullet bullet = bulletGO.GetComponent<Bullet>();
-            InitBullet(bulletGO);
+            SetBulletData(bulletGO);
             float angleToShoot = angleStep - (i * angleStep);
             bullet.SetBulletDirection(Vector3.down, angleToShoot);
         }
     }
 
-    private void InitBullet(GameObject bulletGameObject)
+    private void SetBulletData(GameObject bulletGameObject)
     {
         bulletRenderer = bulletGameObject.GetComponent<SpriteRenderer>();
         bulletRenderer.sprite = EnemyScriptable.EnemyBulletSprite;
