@@ -4,23 +4,15 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour, IDamageable, IShooter
 {
-    public int Health 
-    {
-        get => EnemyScriptable.EnemyHealth;
-        set => Health = EnemyScriptable.EnemyHealth;
-    }
-    public int Damage 
-    {
-        get => EnemyScriptable.EnemyDamage;
-        set => Damage = EnemyScriptable.EnemyDamage;
-    }
+    public int Health { get; set; }
+    public int Damage { get; set; }
 
     public List<EnemyScriptable> Enemies = new List<EnemyScriptable>();
     public GameObject bulletPrefab;
     public EnemyScriptable EnemyScriptable;
     public bool HasCollider = false;
 
-    private ENEMY_MOVE_STATE  moveState = 0;
+    private ENEMY_MOVE_STATE moveState = 0;
     private float moveHorizontalAmount = 0.5f;
     private float moveVerticalAmount = 0.3f;
     private float moveTimer = 1.5f;
@@ -31,13 +23,14 @@ public class Enemy : MonoBehaviour, IDamageable, IShooter
     private Vector3 bulletSpawnOffset = Vector3.down;
     private float timeBetweenShots;
     private float shootTimer;
+    private string enemyBulletTag = "EnemyBullet";
 
     private enum ENEMY_MOVE_STATE
     {
-        NONE = -1,
-        MOVE_RIGHT = 0,
-        MOVE_DOWN = 1,
-        MOVE_LEFT = 2,
+        NONE,
+        MOVE_RIGHT,
+        MOVE_DOWN,
+        MOVE_LEFT
     }
 
     private SpriteRenderer spriteRenderer;
@@ -48,6 +41,8 @@ public class Enemy : MonoBehaviour, IDamageable, IShooter
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
         EnemyScriptable = Helper.RandomArrayValue(Enemies);
+        Health = EnemyScriptable.EnemyHealth;
+        Damage = EnemyScriptable.EnemyDamage;
         spriteRenderer.sprite = EnemyScriptable.EnemySprite;
         numberOfBullets = EnemyScriptable.NumberOfBullets;
         shotMinAngle = EnemyScriptable.MinShotAngle;
@@ -97,15 +92,15 @@ public class Enemy : MonoBehaviour, IDamageable, IShooter
                 break;
 
             case ENEMY_MOVE_STATE.MOVE_RIGHT:
-                transform.position += new Vector3 ( moveHorizontalAmount, 0, 0);
+                transform.position += new Vector3(moveHorizontalAmount, 0, 0);
                 break;
 
             case ENEMY_MOVE_STATE.MOVE_LEFT:
-                transform.position += new Vector3 ( -moveHorizontalAmount, 0, 0);
+                transform.position += new Vector3(-moveHorizontalAmount, 0, 0);
                 break;
 
             case ENEMY_MOVE_STATE.MOVE_DOWN:
-                transform.position += new Vector3( 0, -moveVerticalAmount, 0);
+                transform.position += new Vector3(0, -moveVerticalAmount, 0);
 
                 if (moveRight)
                 {
@@ -120,14 +115,27 @@ public class Enemy : MonoBehaviour, IDamageable, IShooter
         }
     }
 
+    public void TakeDamage(int damage)
+    {
+        Health -= damage;
+        Debug.Log("Enemy took this amount of damage: " + damage);
+
+        if (Health <= 0)
+        {
+            Debug.Log("Enemy should die!");
+            //Destroy(gameObject);
+        }
+    }
+
     public void Shoot()
     {
         shootTimer = timeBetweenShots;
 
         float angleStep = (shotMaxAngle - shotMinAngle) / numberOfBullets;
-        for(int i = 0; i < numberOfBullets; i++)
+        for (int i = 0; i < numberOfBullets; i++)
         {
             GameObject bulletGO = Instantiate(bulletPrefab, transform.position + bulletSpawnOffset, Quaternion.identity);
+            bulletGO.tag = enemyBulletTag;
             Bullet bullet = bulletGO.GetComponent<Bullet>();
             SetBulletData(bulletGO);
             float angleToShoot = angleStep - (i * angleStep);

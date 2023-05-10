@@ -11,6 +11,8 @@ public class Bullet : MonoBehaviour
     public float BulletDestroyTimer;
 
     private float bulletDestroyTimer;
+    private string enemyTag = "Enemy";
+    private string playerTag = "Player";
 
     private void Awake()
     {
@@ -22,6 +24,30 @@ public class Bullet : MonoBehaviour
         bulletDestroyTimer -= Time.deltaTime;
 
         transform.position += BulletDirection.normalized * BulletSpeed * Time.deltaTime;
+
+        RaycastHit2D[] hits = Physics2D.RaycastAll(transform.position, new Vector2(BulletDirection.x, BulletDirection.y), 0.1f);
+        foreach (RaycastHit2D hit in hits)
+        {
+            if (hit.collider.gameObject.CompareTag(playerTag))
+            {
+                Player player = hit.collider.GetComponent<Player>();
+                int playerDamage = player.PlayerDamage;
+
+                player.TakeDamage(playerDamage);
+
+                Destroy(gameObject);
+            }
+
+            if (hit.collider.gameObject.CompareTag(enemyTag))
+            {
+                Enemy enemy = hit.collider.GetComponent<Enemy>();
+                int enemyDamage = enemy.EnemyScriptable.EnemyDamage;
+
+                enemy.TakeDamage(enemyDamage);
+
+                Destroy(gameObject);
+            }
+        }
 
         if (bulletDestroyTimer <= 0)
         {
