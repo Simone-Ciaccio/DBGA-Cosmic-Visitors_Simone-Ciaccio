@@ -7,7 +7,6 @@ public class Bullet : MonoBehaviour
     public Vector3 BulletDirection;
     public Sprite BulletSprite;
     public float BulletSpeed;
-    public bool HasCollider = false;
     public float BulletDestroyTimer;
 
     private float bulletDestroyTimer;

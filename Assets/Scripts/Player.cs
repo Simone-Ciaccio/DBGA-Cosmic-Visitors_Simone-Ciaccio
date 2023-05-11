@@ -54,21 +54,9 @@ public class Player : MonoBehaviour, IDamageable, IShooter
     {
         shootTimer = TimeBetweenBullets;
         GameObject playerBullet = Instantiate(BulletPrefab, transform.position + bulletSpawnOffset, Quaternion.identity);
+        Helper.UpdateColliderShapeToSprite(playerBullet, BulletSprite);
         playerBullet.tag = playerBulletTag;
         Bullet bullet = playerBullet.GetComponent<Bullet>();
         bullet.BulletDirection = Vector3.up;
-
-        if (!bullet.HasCollider)
-        {
-            playerBullet.AddComponent<PolygonCollider2D>();
-            bullet.HasCollider = true;
-        }
-        else
-        {
-            PolygonCollider2D playerBulletCollider = GetComponent<PolygonCollider2D>();
-            Destroy(playerBulletCollider);
-            playerBullet.AddComponent<PolygonCollider2D>();
-            bullet.HasCollider = true;
-        }
     }
 }

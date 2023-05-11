@@ -13,9 +13,9 @@ public class Enemy : MonoBehaviour, IDamageable, IShooter
     public bool HasCollider = false;
 
     private ENEMY_MOVE_STATE moveState = 0;
-    private float moveHorizontalAmount = 0.5f;
+    private float moveHorizontalAmount = 0.3f;
     private float moveVerticalAmount = 0.3f;
-    private float moveTimer = 1.5f;
+    private float moveTimer = 0.7f;
     private bool moveRight = true;
 
     private int numberOfBullets;
@@ -25,17 +25,15 @@ public class Enemy : MonoBehaviour, IDamageable, IShooter
     private float shootTimer;
     private string enemyBulletTag = "EnemyBullet";
 
+    private SpriteRenderer spriteRenderer;
+
     private enum ENEMY_MOVE_STATE
     {
-        NONE,
-        MOVE_RIGHT,
-        MOVE_DOWN,
-        MOVE_LEFT
+        NONE = -1,
+        MOVE_RIGHT = 0,
+        MOVE_DOWN = 1,
+        MOVE_LEFT = 2
     }
-
-    private SpriteRenderer spriteRenderer;
-    private SpriteRenderer bulletRenderer;
-
 
     private void Awake()
     {
@@ -135,31 +133,17 @@ public class Enemy : MonoBehaviour, IDamageable, IShooter
         for (int i = 0; i < numberOfBullets; i++)
         {
             GameObject bulletGO = Instantiate(bulletPrefab, transform.position + bulletSpawnOffset, Quaternion.identity);
+
             bulletGO.tag = enemyBulletTag;
-            Bullet bullet = bulletGO.GetComponent<Bullet>();
-            SetBulletData(bulletGO);
+
+            SpriteRenderer bulletRenderer = bulletGO.GetComponent<SpriteRenderer>();
+            bulletRenderer.sprite = EnemyScriptable.EnemyBulletSprite;
+            Sprite bulletSprite = bulletRenderer.sprite;
+            Helper.UpdateColliderShapeToSprite(bulletGO, bulletSprite);
+            
             float angleToShoot = angleStep - (i * angleStep);
+            Bullet bullet = bulletGO.GetComponent<Bullet>();
             bullet.SetBulletDirection(Vector3.down, angleToShoot);
-        }
-    }
-
-    private void SetBulletData(GameObject bulletGameObject)
-    {
-        bulletRenderer = bulletGameObject.GetComponent<SpriteRenderer>();
-        bulletRenderer.sprite = EnemyScriptable.EnemyBulletSprite;
-
-        Bullet enemyBullet = bulletGameObject.GetComponent<Bullet>();
-        if (!enemyBullet.HasCollider)
-        {
-            bulletGameObject.AddComponent<PolygonCollider2D>();
-            enemyBullet.HasCollider = true;
-        }
-        else
-        {
-            PolygonCollider2D enemyBulletCollider = GetComponent<PolygonCollider2D>();
-            Destroy(enemyBulletCollider);
-            bulletGameObject.AddComponent<PolygonCollider2D>();
-            enemyBullet.HasCollider = true;
         }
     }
 }
