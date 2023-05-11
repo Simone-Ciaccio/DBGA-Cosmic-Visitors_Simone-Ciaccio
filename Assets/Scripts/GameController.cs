@@ -15,18 +15,9 @@ public class GameController : MonoBehaviour
     {
         GameObject enemyGO = Instantiate(EnemyPrefab, position, Quaternion.identity);
 
-        Enemy enemy = enemyGO.GetComponent<Enemy>();
-        if (!enemy.HasCollider)
-        {
-            enemyGO.AddComponent<PolygonCollider2D>();
-            enemy.HasCollider = true;
-        }
-        else
-        {
-            PolygonCollider2D enemyCollider = enemyGO.GetComponent<PolygonCollider2D>();
-            Destroy(enemyCollider);
-            enemyGO.AddComponent<PolygonCollider2D>();
-            enemy.HasCollider = true;
-        }
+        SpriteRenderer enemyRenderer = enemyGO.GetComponent<SpriteRenderer>();
+        Sprite enemySprite = enemyRenderer.sprite;
+
+        Helper.UpdateColliderShapeToSprite(enemyGO, enemySprite);
     }
 }
