@@ -34,7 +34,7 @@ public class Enemy : MonoBehaviour, IDamageable, IShooter
 
     private enum ENEMY_MOVE_STATE
     {
-        NONE = -1,
+        NO_MOVE = -1,
         MOVE_RIGHT = 0,
         MOVE_DOWN = 1,
         MOVE_LEFT = 2
@@ -130,7 +130,7 @@ public class Enemy : MonoBehaviour, IDamageable, IShooter
 
         switch (moveState)
         {
-            case ENEMY_MOVE_STATE.NONE:
+            case ENEMY_MOVE_STATE.NO_MOVE:
                 break;
 
             case ENEMY_MOVE_STATE.MOVE_RIGHT:
