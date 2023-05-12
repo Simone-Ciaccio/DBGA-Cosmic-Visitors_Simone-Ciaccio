@@ -9,12 +9,16 @@ public class Bullet : MonoBehaviour
     public float BulletSpeed;
     public float BulletDestroyTimer;
 
+    private PolygonCollider2D bulletCollider;
     private float bulletDestroyTimer;
     private string enemyTag = "Enemy";
+    private string enemyBulletTag = "EnemyBullet";
     private string playerTag = "Player";
+    private string playerBulletTag = "PlayerBullet";
 
     private void Awake()
     {
+        bulletCollider = GetComponent<PolygonCollider2D>();
         bulletDestroyTimer = BulletDestroyTimer;
     }
 
@@ -24,10 +28,20 @@ public class Bullet : MonoBehaviour
 
         transform.position += BulletDirection.normalized * BulletSpeed * Time.deltaTime;
 
+
+        if (bulletDestroyTimer <= 0)
+        {
+            Destroy(gameObject);
+            bulletDestroyTimer = BulletDestroyTimer;
+        }
+    }
+
+    private void FixedUpdate()
+    {
         RaycastHit2D[] hits = Physics2D.RaycastAll(transform.position, new Vector2(BulletDirection.x, BulletDirection.y), 0.1f);
         foreach (RaycastHit2D hit in hits)
         {
-            if (hit.collider.gameObject.CompareTag(playerTag))
+            if (hit.collider.gameObject.CompareTag(playerTag) && this.CompareTag(enemyBulletTag))
             {
                 Player player = hit.collider.GetComponent<Player>();
                 int playerDamage = player.PlayerDamage;
@@ -37,7 +51,7 @@ public class Bullet : MonoBehaviour
                 Destroy(gameObject);
             }
 
-            if (hit.collider.gameObject.CompareTag(enemyTag))
+            if (hit.collider.gameObject.CompareTag(enemyTag) && this.CompareTag(playerBulletTag))
             {
                 Enemy enemy = hit.collider.GetComponent<Enemy>();
                 int enemyDamage = enemy.EnemyScriptable.EnemyDamage;
@@ -46,12 +60,6 @@ public class Bullet : MonoBehaviour
 
                 Destroy(gameObject);
             }
-        }
-
-        if (bulletDestroyTimer <= 0)
-        {
-            Destroy(gameObject);
-            bulletDestroyTimer = BulletDestroyTimer;
         }
     }
 
