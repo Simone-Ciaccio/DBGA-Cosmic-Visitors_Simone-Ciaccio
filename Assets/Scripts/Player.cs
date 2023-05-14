@@ -41,12 +41,12 @@ public class Player : MonoBehaviour, IDamageable, IShooter
     public void TakeDamage(int damage)
     {
         Health -= damage;
-        Debug.Log("Player took this amount of damage: " + damage);
+        //Debug.Log("Player took this amount of damage: " + damage);
 
         if (Health <= 0)
         {
-            Debug.Log("Player should die!");
-            //Destroy(gameObject);
+            //Debug.Log("Player should die!");
+            Destroy(gameObject);
         }
     }
 

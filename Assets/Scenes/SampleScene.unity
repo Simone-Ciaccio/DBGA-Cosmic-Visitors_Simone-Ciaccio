@@ -123,6 +123,54 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &409670856
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 409670858}
+  - component: {fileID: 409670857}
+  m_Layer: 0
+  m_Name: LevelGenerator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &409670857
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 409670856}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73ef3f90ea6683a4ebf0c9c45994dc33, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GameController: {fileID: 793651445}
+  EnemyPrefab: {fileID: 4148327755893180866, guid: 6d55e98036743194d8a3f1195e130c9d, type: 3}
+  CurrentLevelNumber: 1
+  NumOfEnemies: 5
+--- !u!4 &409670858
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 409670856}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -261,7 +309,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8eab64e05be4544c99ce7d98d0bd9d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  EnemyPrefab: {fileID: 4148327755893180866, guid: 6d55e98036743194d8a3f1195e130c9d, type: 3}
+  Player: {fileID: 2113104068}
+  LevelGenerator: {fileID: 409670857}
+  MaxNumberOfLevels: 5
+  Enemies: []
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -386,11 +437,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 505ff33feaa6f0e439df09af66c5653a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PlayerHealth: 3
+  PlayerHealth: 10
   PlayerDamage: 1
   BulletPrefab: {fileID: 1009538351760812735, guid: 19737653c1799df41a90f357216a744e, type: 3}
   BulletSprite: {fileID: 1791733142, guid: f706babab9dc9b249a8b05fb523216ca, type: 3}
-  TimeBetweenBullets: 1
+  TimeBetweenBullets: 0.5
 --- !u!212 &2113104069
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -452,7 +503,7 @@ Transform:
   m_GameObject: {fileID: 2113104066}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: -3.2, z: 0}
-  m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
+  m_LocalScale: {x: 0.15, y: 0.15, z: 0.15}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}

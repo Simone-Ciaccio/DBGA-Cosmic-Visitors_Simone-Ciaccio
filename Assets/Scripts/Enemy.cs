@@ -11,13 +11,15 @@ public class Enemy : MonoBehaviour, IDamageable, IShooter
     public GameObject bulletPrefab;
     public EnemyScriptable EnemyScriptable;
 
+    private GameController gameController;
+
     private Camera cam;
     private float boundRight;
     private float boundLeft;
 
     private ENEMY_MOVE_STATE moveState = 0;
     private float moveHorizontalAmount = 0.3f;
-    private float moveVerticalAmount = 0.3f;
+    private float moveVerticalAmount;
     private float moveTimer = 0.7f;
     private bool moveRight = true;
 
@@ -42,6 +44,8 @@ public class Enemy : MonoBehaviour, IDamageable, IShooter
 
     private void Awake()
     {
+        gameController = FindObjectOfType<GameController>();
+
         cam = Camera.main;
         Vector2 ScreenTopRightInWorld = cam.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
         Vector2 ScreenBottomLeftInWorld = cam.ScreenToWorldPoint(new Vector2(0, 0));
@@ -54,6 +58,7 @@ public class Enemy : MonoBehaviour, IDamageable, IShooter
         Damage = EnemyScriptable.EnemyDamage;
         spriteRenderer.sprite = EnemyScriptable.EnemySprite;
         halfSpriteSize = new Vector2(spriteRenderer.bounds.size.x / 2, spriteRenderer.bounds.size.y / 2);
+        moveVerticalAmount = halfSpriteSize.y * 2;
 
         numberOfBullets = EnemyScriptable.NumberOfBullets;
         shotMinAngle = EnemyScriptable.MinShotAngle;
@@ -80,12 +85,13 @@ public class Enemy : MonoBehaviour, IDamageable, IShooter
     public void TakeDamage(int damage)
     {
         Health -= damage;
-        Debug.Log("Enemy took this amount of damage: " + damage);
+        //Debug.Log("Enemy took this amount of damage: " + damage);
 
         if (Health <= 0)
         {
-            Debug.Log("Enemy should die!");
-            //Destroy(gameObject);
+            //Debug.Log("Enemy should die!");
+            Destroy(gameObject);
+            gameController.Enemies.Remove(gameObject);
         }
     }
 
