@@ -47,10 +47,9 @@ public class Boss : MonoBehaviour, IDamageable, IShooter
         boundLeft = ScreenBottomLeftInWorld.x;
         boundTop = ScreenTopRightInWorld.y;
 
-        BossScriptable = GetComponent<BossScriptable>();
-        spriteRenderer = GetComponent<SpriteRenderer>();
-
-        halfSpriteSize = new Vector2((spriteRenderer.sprite.bounds.size.x / 2), (spriteRenderer.sprite.bounds.size.y / 2));
+        //BossScriptable = GetComponent<BossScriptable>();
+        spriteRenderer = BossPrefab.GetComponent<SpriteRenderer>();
+        halfSpriteSize = new Vector2((spriteRenderer.bounds.size.x / 2), (spriteRenderer.bounds.size.y / 2));
 
         Health = BossScriptable.EnemyHealth;
         Damage = BossScriptable.EnemyDamage;
@@ -107,7 +106,7 @@ public class Boss : MonoBehaviour, IDamageable, IShooter
 
         if (transform.position.y >= boundTop - halfSpriteSize.y)
         {
-            transform.position = new Vector3(transform.position.x, halfSpriteSize.y, transform.position.z);
+            transform.position = new Vector3(transform.position.x, boundTop - (halfSpriteSize.y * 2), transform.position.z);
         }
 
         switch (moveState)

@@ -112,7 +112,7 @@ public class LevelGenerator : MonoBehaviour
 
     public void CreateBossLevel()
     {
-        Vector3 spawnPosition = new Vector3((boundRight / 2), (boundTop / 2), 0);
+        Vector3 spawnPosition = new Vector3((boundRight / 2), boundTop, 0);
 
         SpawnBoss(spawnPosition);
     }
