@@ -1,12 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class LevelGenerator : MonoBehaviour
 {
     public GameController GameController;
 
     public GameObject EnemyPrefab;
+    public GameObject BossPrefab;
 
     public int CurrentLevelNumber = 1;
     public int NumOfEnemies;
@@ -22,6 +24,8 @@ public class LevelGenerator : MonoBehaviour
     private int boundLeft;
     private int boundTop;
     private int halfScreenHeight;
+
+    private char[] tiles;
 
     private int currentNumOfEnemies = 0;
 
@@ -51,7 +55,7 @@ public class LevelGenerator : MonoBehaviour
 
 
         //SpawnEnemy(new Vector3(0, 3, 0));
-        SetLevelData();
+        //SetLevelData();
         CreateLevel();
     }
 
@@ -69,21 +73,26 @@ public class LevelGenerator : MonoBehaviour
             levelData.SetStartWidthPos(boundLeft);
             levelData.SetWidth(boundRight);
             levelData.SetWidthStep((int)enemySpriteSize.x);
+
+            tiles = levelData.GetTiles();
         }
     }
 
     public void CreateLevel()
     {
         //TO DO: Get random position in the levelData,
+        currentNumOfEnemies = 0;
 
-        foreach (char tile in levelData.GetTiles())
+        SetLevelData();
+
+        foreach (char tile in tiles)
         {
-            int randomXCoord = Random.Range(boundLeft, (levelData.GetWidth() - 1));
+            int randomXCoord = Random.Range(boundLeft, levelData.GetWidth());
             int randomYCoord = Random.Range(halfScreenHeight, levelData.GetHeight());
 
             char tileToCheck = levelData.GetTile(randomXCoord, randomYCoord);
             //check if it is an empty tile,
-            if (tileToCheck != EMPTY)
+            if (tileToCheck != EMPTY && tileToCheck == ENEMY)
             {
                 continue;
             }
@@ -101,6 +110,13 @@ public class LevelGenerator : MonoBehaviour
         }
     }
 
+    public void CreateBossLevel()
+    {
+        Vector3 spawnPosition = new Vector3((boundRight / 2), (boundTop / 2), 0);
+
+        SpawnBoss(spawnPosition);
+    }
+
     private void SpawnEnemy(Vector3 position)
     {
         GameObject enemyGO = Instantiate(EnemyPrefab, position, Quaternion.identity);
@@ -111,6 +127,18 @@ public class LevelGenerator : MonoBehaviour
         Sprite enemySprite = enemyRenderer.sprite;
 
         Helper.UpdateColliderShapeToSprite(enemyGO, enemySprite);
+    }
+
+    private void SpawnBoss(Vector3 position)
+    {
+        GameObject enemyGO = Instantiate(BossPrefab, position, Quaternion.identity);
+
+        GameController.Enemies.Add(enemyGO);
+
+        SpriteRenderer bossRenderer = enemyGO.GetComponent<SpriteRenderer>();
+        Sprite bossSprite = bossRenderer.sprite;
+
+        Helper.UpdateColliderShapeToSprite(enemyGO, bossSprite);
     }
 }
 

@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88594ae204e375c4b86b74e1b7f6513c, type: 3}
+  m_Name: New Boss
+  m_EditorClassIdentifier: 
+  EnemyHealth: 50
+  EnemyDamage: 1
+  EnemySprite: {fileID: 1327786387, guid: fd688a39302efa746b722caeb0a9d287, type: 3}
+  EnemyBulletPrefab: {fileID: 1009538351760812735, guid: 19737653c1799df41a90f357216a744e, type: 3}
+  EnemyBulletSprite: {fileID: -1857480278, guid: f706babab9dc9b249a8b05fb523216ca, type: 3}
+  TimeBetweenShots: 0.3
+  NumberOfBullets: 50
+  MinShotAngle: -20
+  MaxShotAngle: 20

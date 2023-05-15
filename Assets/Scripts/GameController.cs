@@ -5,6 +5,8 @@ using UnityEngine;
 public class GameController : MonoBehaviour
 {
     public Player Player;
+    public GameObject Boss;
+    public BossScriptable BossScriptable;
 
     public LevelGenerator LevelGenerator;
 
@@ -21,8 +23,13 @@ public class GameController : MonoBehaviour
     
         if (Enemies.Count <= 0)
         {
-            if (LevelGenerator.CurrentLevelNumber < MaxNumberOfLevels)
+            if (LevelGenerator.CurrentLevelNumber <= MaxNumberOfLevels)
+            {
                 NextLevel();
+
+                if (LevelGenerator.CurrentLevelNumber % 5 == 0)
+                BossLevel();
+            }
             else
                 GameOver();
         }
@@ -32,6 +39,12 @@ public class GameController : MonoBehaviour
     {
         LevelGenerator.CurrentLevelNumber++;
         ResetLevel();
+    }
+
+    private void BossLevel()
+    {
+        //LevelGenerator.CurrentLevelNumber++;
+        LevelGenerator.CreateBossLevel();
     }
 
     private void ResetLevel()

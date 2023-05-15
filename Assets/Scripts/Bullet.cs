@@ -13,6 +13,7 @@ public class Bullet : MonoBehaviour
     private float bulletDestroyTimer;
     private string enemyTag = "Enemy";
     private string enemyBulletTag = "EnemyBullet";
+    private string bossTag = "Boss";
     private string playerTag = "Player";
     private string playerBulletTag = "PlayerBullet";
 
@@ -57,6 +58,16 @@ public class Bullet : MonoBehaviour
                 int enemyDamage = enemy.EnemyScriptable.EnemyDamage;
 
                 enemy.TakeDamage(enemyDamage);
+
+                Destroy(gameObject);
+            }
+
+            if (hit.collider.gameObject.CompareTag(bossTag) && this.CompareTag(playerBulletTag))
+            {
+                Boss boss = hit.collider.GetComponent<Boss>();
+                int enemyDamage = boss.BossScriptable.EnemyDamage;
+
+                boss.TakeDamage(enemyDamage);
 
                 Destroy(gameObject);
             }

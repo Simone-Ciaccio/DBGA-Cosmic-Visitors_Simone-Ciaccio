@@ -16,6 +16,7 @@ public class Enemy : MonoBehaviour, IDamageable, IShooter
     private Camera cam;
     private float boundRight;
     private float boundLeft;
+    private float boundTop;
 
     private ENEMY_MOVE_STATE moveState = 0;
     private float moveHorizontalAmount = 0.3f;
@@ -51,6 +52,7 @@ public class Enemy : MonoBehaviour, IDamageable, IShooter
         Vector2 ScreenBottomLeftInWorld = cam.ScreenToWorldPoint(new Vector2(0, 0));
         boundRight = ScreenTopRightInWorld.x;
         boundLeft = ScreenBottomLeftInWorld.x;
+        boundTop = ScreenTopRightInWorld.y;
 
         spriteRenderer = GetComponent<SpriteRenderer>();
         EnemyScriptable = Helper.RandomArrayValue(Enemies);
@@ -132,6 +134,11 @@ public class Enemy : MonoBehaviour, IDamageable, IShooter
             transform.position = new Vector3(boundLeft + (0.1f + halfSpriteSize.x), transform.position.y, transform.position.z);
             moveState = ENEMY_MOVE_STATE.MOVE_DOWN;
             moveRight = true;
+        }
+
+        if (transform.position.y >= boundTop - halfSpriteSize.y)
+        {
+            transform.position = new Vector3(transform.position.x, halfSpriteSize.y, transform.position.z);
         }
 
         switch (moveState)

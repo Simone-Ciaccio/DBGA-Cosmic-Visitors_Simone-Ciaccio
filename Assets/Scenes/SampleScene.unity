@@ -154,6 +154,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GameController: {fileID: 793651445}
   EnemyPrefab: {fileID: 4148327755893180866, guid: 6d55e98036743194d8a3f1195e130c9d, type: 3}
+  BossPrefab: {fileID: 2481275108197580887, guid: 4ba7777bfa3416b4c82847ca18181097, type: 3}
   CurrentLevelNumber: 1
   NumOfEnemies: 5
 --- !u!4 &409670858
@@ -310,6 +311,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Player: {fileID: 2113104068}
+  Boss: {fileID: 2481275108197580887, guid: 4ba7777bfa3416b4c82847ca18181097, type: 3}
+  BossScriptable: {fileID: 11400000, guid: 6dcf4ce21ed74b548becd61dac85ae45, type: 2}
   LevelGenerator: {fileID: 409670857}
   MaxNumberOfLevels: 5
   Enemies: []
@@ -503,7 +506,7 @@ Transform:
   m_GameObject: {fileID: 2113104066}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: -3.2, z: 0}
-  m_LocalScale: {x: 0.15, y: 0.15, z: 0.15}
+  m_LocalScale: {x: 0.17, y: 0.17, z: 0.17}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
@@ -583,7 +586,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a11a2c3a9c58702469c0feb3fadb7abb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MoveSpeed: 5
+  MoveSpeed: 7
   MoveAction:
     m_Name: Move
     m_Type: 0

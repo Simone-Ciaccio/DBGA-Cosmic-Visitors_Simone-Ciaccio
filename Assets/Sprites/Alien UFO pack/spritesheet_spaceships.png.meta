@@ -168,6 +168,38 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: EnemyUFO_Blue
+      rect:
+        serializedVersion: 2
+        x: 248
+        y: 368
+        width: 124
+        height: 144
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: 28, y: -33}
+        - {x: 25, y: -61}
+        - {x: 0, y: -72}
+        - {x: -25, y: -60}
+        - {x: -29, y: -33}
+        - {x: -62, y: -22}
+        - {x: -62, y: 5}
+        - {x: -27, y: 72}
+        - {x: 26, y: 72}
+        - {x: 62, y: 5}
+        - {x: 62, y: -22}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3cec1d556993575469a73610c3fac541
+      internalID: 1327786387
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -179,6 +211,7 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
+      EnemyUFO_Blue: 1327786387
       EnemyUFO_Pink: -491994773
       EnemyUFO_Yellow: -981873417
   mipmapLimitGroupName: 
