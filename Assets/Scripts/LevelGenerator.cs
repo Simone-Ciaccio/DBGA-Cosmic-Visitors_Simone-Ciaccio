@@ -34,12 +34,10 @@ public class LevelGenerator : MonoBehaviour
     {
         cam = Camera.main;
 
-        Vector2 ScreenTopRightInWorld = cam.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
-        Vector2 ScreenBottomLeftInWorld = cam.ScreenToWorldPoint(new Vector2(0, 0));
-        boundRight = (int)ScreenTopRightInWorld.x;
-        boundLeft = (int)ScreenBottomLeftInWorld.x;
-        boundTop = (int)ScreenTopRightInWorld.y;
-        halfScreenHeight = (int)ScreenTopRightInWorld.y / 2;
+        boundRight = (int)Helper.GetScreenBoundRight(cam);
+        boundLeft = (int)Helper.GetScreenBoundLeft(cam);
+        boundTop = (int)Helper.GetScreenBoundTop(cam);
+        halfScreenHeight = (int)Helper.GetScreenBoundTop(cam) / 2;
 
         SpriteRenderer enemySpriteRenderer = EnemyPrefab.GetComponent<SpriteRenderer>();
         enemySpriteSize = new Vector2(enemySpriteRenderer.bounds.size.x, enemySpriteRenderer.bounds.size.y);

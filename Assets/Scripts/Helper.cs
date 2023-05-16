@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class Helper
@@ -37,5 +38,33 @@ public class Helper
                 polygonCollider.SetPath(i, path.ToArray());
             }
         }
+    }
+
+    public static float GetScreenBoundRight(Camera cam)
+    {
+        Vector2 screenTopRight = cam.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
+
+        return screenTopRight.x;
+    }
+
+    public static float GetScreenBoundTop(Camera cam)
+    {
+        Vector2 screenTopRight = cam.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
+
+        return screenTopRight.y;
+    }
+
+    public static float ScreenBoundBottom(Camera cam)
+    {
+        Vector2 screenBottomLeft = cam.ScreenToWorldPoint(Vector2.zero);
+
+        return screenBottomLeft.y;
+    }
+
+    public static float GetScreenBoundLeft(Camera cam)
+    {
+        Vector2 screenBottomLeft = cam.ScreenToWorldPoint(Vector2.zero);
+
+        return screenBottomLeft.x;
     }
 }

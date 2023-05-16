@@ -19,10 +19,9 @@ public class PlayerInput : MonoBehaviour
     private void Awake()
     {
         cam = Camera.main;
-        Vector2 ScreenTopRightInWorld = cam.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
-        Vector2 ScreenBottomLeftInWorld = cam.ScreenToWorldPoint(new Vector2(0, 0));
-        boundRight = ScreenTopRightInWorld.x;
-        boundLeft = ScreenBottomLeftInWorld.x;
+
+        boundRight = Helper.GetScreenBoundRight(cam);
+        boundLeft = Helper.GetScreenBoundLeft(cam);
 
         SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
         Sprite sprite = spriteRenderer.sprite;

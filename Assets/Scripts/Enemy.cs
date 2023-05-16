@@ -48,11 +48,10 @@ public class Enemy : MonoBehaviour, IDamageable, IShooter
         gameController = FindObjectOfType<GameController>();
 
         cam = Camera.main;
-        Vector2 ScreenTopRightInWorld = cam.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
-        Vector2 ScreenBottomLeftInWorld = cam.ScreenToWorldPoint(new Vector2(0, 0));
-        boundRight = ScreenTopRightInWorld.x;
-        boundLeft = ScreenBottomLeftInWorld.x;
-        boundTop = ScreenTopRightInWorld.y;
+
+        boundRight = Helper.GetScreenBoundRight(cam);
+        boundLeft = Helper.GetScreenBoundLeft(cam);
+        boundTop = Helper.GetScreenBoundTop(cam);
 
         spriteRenderer = GetComponent<SpriteRenderer>();
         EnemyScriptable = Helper.RandomArrayValue(Enemies);
