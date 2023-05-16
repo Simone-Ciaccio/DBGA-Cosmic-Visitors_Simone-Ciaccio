@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class LevelGenerator : MonoBehaviour
 {
@@ -29,19 +28,11 @@ public class LevelGenerator : MonoBehaviour
 
     private int currentNumOfEnemies = 0;
 
-    //private char[] tiles;
-
-
     private LevelData levelData = new LevelData();
 
     private void Awake()
     {
         cam = Camera.main;
-
-        //levelData = GetComponent<LevelData>();
-        //levelData = new LevelData();
-
-        //tiles = levelData.GetTiles();
 
         Vector2 ScreenTopRightInWorld = cam.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
         Vector2 ScreenBottomLeftInWorld = cam.ScreenToWorldPoint(new Vector2(0, 0));
@@ -53,9 +44,6 @@ public class LevelGenerator : MonoBehaviour
         SpriteRenderer enemySpriteRenderer = EnemyPrefab.GetComponent<SpriteRenderer>();
         enemySpriteSize = new Vector2(enemySpriteRenderer.bounds.size.x, enemySpriteRenderer.bounds.size.y);
 
-
-        //SpawnEnemy(new Vector3(0, 3, 0));
-        //SetLevelData();
         CreateLevel();
     }
 
@@ -63,9 +51,7 @@ public class LevelGenerator : MonoBehaviour
     {
         currentNumOfEnemies = 0;
 
-        if (levelData == null)
-            return;
-        else
+        if (levelData != null)
         {
             levelData.SetStartHeightPos(halfScreenHeight);
             levelData.SetHeight(boundTop);
@@ -80,7 +66,6 @@ public class LevelGenerator : MonoBehaviour
 
     public void CreateLevel()
     {
-        //TO DO: Get random position in the levelData,
         currentNumOfEnemies = 0;
 
         SetLevelData();
@@ -91,20 +76,17 @@ public class LevelGenerator : MonoBehaviour
             int randomYCoord = Random.Range(halfScreenHeight, levelData.GetHeight());
 
             char tileToCheck = levelData.GetTile(randomXCoord, randomYCoord);
-            //check if it is an empty tile,
             if (tileToCheck != EMPTY && tileToCheck == ENEMY)
             {
                 continue;
             }
             else
             {
-                //if it is, spawn an enemy and set it as enemy tile,
                 if(currentNumOfEnemies < NumOfEnemies)
                 {
                     SpawnEnemy(new Vector3(randomXCoord, randomYCoord, 0));
                     levelData.SetTile(randomXCoord, randomYCoord, ENEMY);
                     currentNumOfEnemies++;
-                    //make it repeat until it reaches a number of enemies.
                 }
             }
         }
@@ -154,14 +136,8 @@ class LevelData
 
     public LevelData()
     {
-        //Vector2 screenTopRightInWorld = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
-        //Vector2 screenBottomLeftInWorld = Camera.main.ScreenToWorldPoint(new Vector2(0, 0));
-
         width = GetWidth();
         height = GetHeight();
-
-        //int boundLeft = (int)screenBottomLeftInWorld.x;
-        //int boundBottom = (int)screenBottomLeftInWorld.y;
 
         tiles = new char[width * height];
 

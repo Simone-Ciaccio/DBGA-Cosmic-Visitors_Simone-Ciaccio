@@ -7,7 +7,6 @@ public class Boss : MonoBehaviour, IDamageable, IShooter
     public int Health { get; set; }
     public int Damage { get; set; }
     public float speed;
-    //public float TimeBetweenShots;
 
     private enum BOSS_MOVE_STATE
     {
@@ -19,7 +18,6 @@ public class Boss : MonoBehaviour, IDamageable, IShooter
     public GameObject BossPrefab;
     public BossScriptable BossScriptable;
 
-    private SpriteRenderer spriteRenderer;
     private GameController gameController;
 
     private BOSS_MOVE_STATE moveState = 0;
@@ -47,9 +45,8 @@ public class Boss : MonoBehaviour, IDamageable, IShooter
         boundLeft = ScreenBottomLeftInWorld.x;
         boundTop = ScreenTopRightInWorld.y;
 
-        //BossScriptable = GetComponent<BossScriptable>();
-        spriteRenderer = BossPrefab.GetComponent<SpriteRenderer>();
-        halfSpriteSize = new Vector2((spriteRenderer.bounds.size.x / 2), (spriteRenderer.bounds.size.y / 2));
+        SpriteRenderer bossRenderer = BossPrefab.GetComponent<SpriteRenderer>();
+        halfSpriteSize = new Vector2((bossRenderer.bounds.size.x / 2), (bossRenderer.bounds.size.y / 2));
 
         Health = BossScriptable.EnemyHealth;
         Damage = BossScriptable.EnemyDamage;
@@ -59,12 +56,11 @@ public class Boss : MonoBehaviour, IDamageable, IShooter
         numberOfBullets = BossScriptable.NumberOfBullets;
         bulletPrefab = BossScriptable.EnemyBulletPrefab;
 
-        spriteRenderer.sprite = BossScriptable.EnemySprite;
+        bossRenderer.sprite = BossScriptable.EnemySprite;
 
         gameController = FindObjectOfType<GameController>();
     }
 
-    // Update is called once per frame
     void Update()
     {
         shootTimer -= Time.deltaTime;
@@ -76,6 +72,27 @@ public class Boss : MonoBehaviour, IDamageable, IShooter
             Shoot();
         }
     }
+    public void Shoot()
+    {
+        shootTimer = timeBetweenShots;
+
+        float angleStep = (shotMaxAngle - shotMinAngle) / numberOfBullets;
+        for (int i = 0; i < numberOfBullets; i++)
+        {
+            GameObject bulletGO = Instantiate(bulletPrefab, transform.position + bulletSpawnOffset, Quaternion.identity);
+        
+            bulletGO.tag = enemyBulletTag;
+        
+            SpriteRenderer bulletRenderer = bulletGO.GetComponent<SpriteRenderer>();
+            bulletRenderer.sprite = BossScriptable.EnemyBulletSprite;
+            Sprite bulletSprite = bulletRenderer.sprite;
+            Helper.UpdateColliderShapeToSprite(bulletGO, bulletSprite);
+        
+            float angleToShoot = angleStep - (i * angleStep);
+            Bullet bullet = bulletGO.GetComponent<Bullet>();
+            bullet.SetBulletDirection(Vector3.down, angleToShoot);
+        }
+    }
 
     public void TakeDamage(int damage)
     {
@@ -83,7 +100,6 @@ public class Boss : MonoBehaviour, IDamageable, IShooter
 
         if (Health <= 0)
         {
-            //Debug.Log("Enemy should die!");
             Destroy(gameObject);
             gameController.Enemies.Remove(gameObject);
         }
@@ -95,18 +111,16 @@ public class Boss : MonoBehaviour, IDamageable, IShooter
         {
             transform.position = new Vector3(boundRight - (0.1f + halfSpriteSize.x), transform.position.y, transform.position.z);
             moveState = BOSS_MOVE_STATE.MOVE_LEFT;
-            //moveRight = false;
         }
         else if (transform.position.x <= boundLeft + halfSpriteSize.x)
         {
             transform.position = new Vector3(boundLeft + (0.1f + halfSpriteSize.x), transform.position.y, transform.position.z);
             moveState = BOSS_MOVE_STATE.MOVE_RIGHT;
-            //moveRight = true;
         }
 
         if (transform.position.y >= boundTop - halfSpriteSize.y)
         {
-            transform.position = new Vector3(transform.position.x, boundTop - (halfSpriteSize.y * 2), transform.position.z);
+            transform.position = new Vector3(transform.position.x, boundTop - (halfSpriteSize.y * 2) - 1.5f, transform.position.z);
         }
 
         switch (moveState)
@@ -115,34 +129,12 @@ public class Boss : MonoBehaviour, IDamageable, IShooter
                 break;
 
             case BOSS_MOVE_STATE.MOVE_RIGHT:
-                transform.position += Vector3.right * speed * Time.deltaTime;
+                transform.position += speed * Time.deltaTime * Vector3.right;
                 break;
 
             case BOSS_MOVE_STATE.MOVE_LEFT:
-                transform.position += Vector3.left * speed * Time.deltaTime;
+                transform.position += speed * Time.deltaTime * Vector3.left;
                 break;
-        }
-    }
-
-    public void Shoot()
-    {
-        shootTimer = timeBetweenShots;
-
-        float angleStep = (shotMaxAngle - shotMinAngle) / numberOfBullets;
-        for (int i = 0; i < numberOfBullets; i++)
-        {
-            GameObject bulletGO = Instantiate(bulletPrefab, transform.position + bulletSpawnOffset, Quaternion.identity);
-
-            bulletGO.tag = enemyBulletTag;
-
-            SpriteRenderer bulletRenderer = bulletGO.GetComponent<SpriteRenderer>();
-            bulletRenderer.sprite = BossScriptable.EnemyBulletSprite;
-            Sprite bulletSprite = bulletRenderer.sprite;
-            Helper.UpdateColliderShapeToSprite(bulletGO, bulletSprite);
-
-            float angleToShoot = angleStep - (i * angleStep);
-            Bullet bullet = bulletGO.GetComponent<Bullet>();
-            bullet.SetBulletDirection(Vector3.down, angleToShoot);
         }
     }
 }

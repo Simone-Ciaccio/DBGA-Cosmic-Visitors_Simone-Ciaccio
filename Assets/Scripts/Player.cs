@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Player : MonoBehaviour, IDamageable, IShooter
 {
+    public int Lives;
+
     public int PlayerHealth;
     public int PlayerDamage;
 
@@ -19,11 +21,16 @@ public class Player : MonoBehaviour, IDamageable, IShooter
     private SpriteRenderer bulletRenderer;
     private Vector3 bulletSpawnOffset = Vector3.up;
 
+    private string enemyTag = "Enemy";
+
+    private Vector3 startingPosition; 
 
     private void Awake()
     {
         Health = PlayerHealth;
         Damage = PlayerDamage;
+
+        startingPosition = transform.position;
 
         bulletRenderer = BulletPrefab.GetComponent<SpriteRenderer>();
         bulletRenderer.sprite = BulletSprite;
@@ -41,12 +48,15 @@ public class Player : MonoBehaviour, IDamageable, IShooter
     public void TakeDamage(int damage)
     {
         Health -= damage;
-        //Debug.Log("Player took this amount of damage: " + damage);
 
         if (Health <= 0)
         {
-            //Debug.Log("Player should die!");
-            Destroy(gameObject);
+            Health = PlayerHealth;
+            Lives--;
+            transform.position = startingPosition;
+
+            if(Lives <= 0)
+                Destroy(gameObject);
         }
     }
 
@@ -58,5 +68,13 @@ public class Player : MonoBehaviour, IDamageable, IShooter
         playerBullet.tag = playerBulletTag;
         Bullet bullet = playerBullet.GetComponent<Bullet>();
         bullet.BulletDirection = Vector3.up;
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision != null && collision.gameObject.CompareTag(enemyTag))
+        {
+            Lives--;
+        }
     }
 }

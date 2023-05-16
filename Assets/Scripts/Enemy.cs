@@ -19,9 +19,9 @@ public class Enemy : MonoBehaviour, IDamageable, IShooter
     private float boundTop;
 
     private ENEMY_MOVE_STATE moveState = 0;
-    private float moveHorizontalAmount = 0.3f;
+    private float moveHorizontalAmount = 0.5f;
     private float moveVerticalAmount;
-    private float moveTimer = 0.7f;
+    private float moveTimer = 0.1f;
     private bool moveRight = true;
 
     private Vector2 halfSpriteSize;
@@ -87,11 +87,9 @@ public class Enemy : MonoBehaviour, IDamageable, IShooter
     public void TakeDamage(int damage)
     {
         Health -= damage;
-        //Debug.Log("Enemy took this amount of damage: " + damage);
 
         if (Health <= 0)
         {
-            //Debug.Log("Enemy should die!");
             Destroy(gameObject);
             gameController.Enemies.Remove(gameObject);
         }

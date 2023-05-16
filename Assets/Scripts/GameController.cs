@@ -16,7 +16,7 @@ public class GameController : MonoBehaviour
 
     private void Update()
     {
-        if (Player.Health <= 0)
+        if (Player.Lives <= 0)
         {
             GameOver();
         }
@@ -43,7 +43,7 @@ public class GameController : MonoBehaviour
 
     private void BossLevel()
     {
-        //LevelGenerator.CurrentLevelNumber++;
+        LevelGenerator.CurrentLevelNumber++;
         LevelGenerator.CreateBossLevel();
     }
 

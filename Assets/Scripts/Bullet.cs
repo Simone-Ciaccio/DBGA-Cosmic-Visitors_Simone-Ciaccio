@@ -9,7 +9,6 @@ public class Bullet : MonoBehaviour
     public float BulletSpeed;
     public float BulletDestroyTimer;
 
-    private PolygonCollider2D bulletCollider;
     private float bulletDestroyTimer;
     private string enemyTag = "Enemy";
     private string enemyBulletTag = "EnemyBullet";
@@ -19,7 +18,6 @@ public class Bullet : MonoBehaviour
 
     private void Awake()
     {
-        bulletCollider = GetComponent<PolygonCollider2D>();
         bulletDestroyTimer = BulletDestroyTimer;
     }
 
@@ -27,7 +25,7 @@ public class Bullet : MonoBehaviour
     {
         bulletDestroyTimer -= Time.deltaTime;
 
-        transform.position += BulletDirection.normalized * BulletSpeed * Time.deltaTime;
+        transform.position += BulletSpeed * Time.deltaTime * BulletDirection.normalized;
 
 
         if (bulletDestroyTimer <= 0)

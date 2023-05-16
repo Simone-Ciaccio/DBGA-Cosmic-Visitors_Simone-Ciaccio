@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d7ae75310a22114e977c6c3ba5eb376, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 1.5
+  speed: 2
   BossPrefab: {fileID: 2481275108197580887}
   BossScriptable: {fileID: 11400000, guid: 6dcf4ce21ed74b548becd61dac85ae45, type: 2}
 --- !u!212 &882910621734003956
