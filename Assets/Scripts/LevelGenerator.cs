@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Net;
 using UnityEngine;
 
 public class LevelGenerator : MonoBehaviour
@@ -9,7 +11,6 @@ public class LevelGenerator : MonoBehaviour
     public GameObject EnemyPrefab;
     public GameObject BossPrefab;
 
-    public int CurrentLevelNumber = 1;
     public int NumOfEnemies;
 
     public const char EMPTY = '-';
@@ -19,81 +20,87 @@ public class LevelGenerator : MonoBehaviour
 
     private Vector2 enemySpriteSize;
 
-    private int boundRight;
-    private int boundLeft;
-    private int boundTop;
-    private int halfScreenHeight;
-
-    private char[] tiles;
+    private float boundRight;
+    private float boundLeft;
+    private float boundTop;
+    private float halfScreenHeight;
 
     private int currentNumOfEnemies = 0;
 
-    private LevelData levelData = new LevelData();
+    private Dictionary<Vector2, char> tiles = new Dictionary<Vector2, char>();
 
     private void Awake()
     {
         cam = Camera.main;
 
-        boundRight = (int)Helper.GetScreenBoundRight(cam);
-        boundLeft = (int)Helper.GetScreenBoundLeft(cam);
-        boundTop = (int)Helper.GetScreenBoundTop(cam);
-        halfScreenHeight = (int)Helper.GetScreenBoundTop(cam) / 2;
+        boundRight = Helper.GetScreenBoundRight(cam);
+        boundLeft = Helper.GetScreenBoundLeft(cam);
+        boundTop = Helper.GetScreenBoundTop(cam);
+        halfScreenHeight = Helper.GetScreenBoundTop(cam) / 2;
 
         SpriteRenderer enemySpriteRenderer = EnemyPrefab.GetComponent<SpriteRenderer>();
         enemySpriteSize = new Vector2(enemySpriteRenderer.bounds.size.x, enemySpriteRenderer.bounds.size.y);
-
-        CreateLevel();
-    }
-
-    private void SetLevelData()
-    {
-        currentNumOfEnemies = 0;
-
-        if (levelData != null)
-        {
-            levelData.SetStartHeightPos(halfScreenHeight);
-            levelData.SetHeight(boundTop);
-            levelData.SetHeightStep((int)enemySpriteSize.y);
-            levelData.SetStartWidthPos(boundLeft);
-            levelData.SetWidth(boundRight);
-            levelData.SetWidthStep((int)enemySpriteSize.x);
-
-            tiles = levelData.GetTiles();
-        }
     }
 
     public void CreateLevel()
     {
         currentNumOfEnemies = 0;
 
-        SetLevelData();
+        InitTiles();
 
-        foreach (char tile in tiles)
+        for (int i = 0; i < 1000; i++)
         {
-            int randomXCoord = Random.Range(boundLeft, levelData.GetWidth());
-            int randomYCoord = Random.Range(halfScreenHeight, levelData.GetHeight());
+            int tileIndexToCheck = Random.Range(0, tiles.Count -1);
 
-            char tileToCheck = levelData.GetTile(randomXCoord, randomYCoord);
-            if (tileToCheck != EMPTY && tileToCheck == ENEMY)
-            {
+            if (GetTile(tileIndexToCheck) != EMPTY)
                 continue;
-            }
             else
             {
-                if(currentNumOfEnemies < NumOfEnemies)
+                if(currentNumOfEnemies >= NumOfEnemies) 
                 {
-                    SpawnEnemy(new Vector3(randomXCoord, randomYCoord, 0));
-                    levelData.SetTile(randomXCoord, randomYCoord, ENEMY);
+                    break;
+                }
+                else
+                {
+                    SetTile(tileIndexToCheck, ENEMY);
+                    Vector2 tilePosition = tiles.ElementAt(tileIndexToCheck).Key;
+                    SpawnEnemy(tilePosition);
                     currentNumOfEnemies++;
                 }
             }
         }
     }
 
+    private void InitTiles()
+    {
+        tiles.Clear();
+
+        for (float y = halfScreenHeight + enemySpriteSize.y; y < boundTop - enemySpriteSize.y; y += enemySpriteSize.y)
+        {
+            for (float x = boundLeft + enemySpriteSize.x; x < boundRight - enemySpriteSize.x; x += enemySpriteSize.x)
+            {
+                tiles.Add(new Vector2(x, y), EMPTY);
+            }
+        }
+    }
+
+    private void SetTile(int index, char tile)
+    {
+        Vector2 tileKey = tiles.ElementAt(index).Key;
+
+        tiles[tileKey] = tile;
+    }
+
+    private char GetTile(int index)
+    {
+        char tile = tiles.ElementAt(index).Value;
+
+        return tile;
+    }
+
     public void CreateBossLevel()
     {
         Vector3 spawnPosition = new Vector3((boundRight / 2), boundTop, 0);
-
         SpawnBoss(spawnPosition);
     }
 
@@ -111,100 +118,13 @@ public class LevelGenerator : MonoBehaviour
 
     private void SpawnBoss(Vector3 position)
     {
-        GameObject enemyGO = Instantiate(BossPrefab, position, Quaternion.identity);
+        GameObject bossGO = Instantiate(BossPrefab, position, Quaternion.identity);
 
-        GameController.Enemies.Add(enemyGO);
+        GameController.Enemies.Add(bossGO);
 
-        SpriteRenderer bossRenderer = enemyGO.GetComponent<SpriteRenderer>();
+        SpriteRenderer bossRenderer = bossGO.GetComponent<SpriteRenderer>();
         Sprite bossSprite = bossRenderer.sprite;
 
-        Helper.UpdateColliderShapeToSprite(enemyGO, bossSprite);
-    }
-}
-
-class LevelData
-{
-    private int width = 15;
-    private int height = 15;
-    private int widthStartPos = 0;
-    private int heightStartPos = 0;
-    private int widthStep = 1;
-    private int heightStep = 1;
-    private char[] tiles;
-
-    public LevelData()
-    {
-        width = GetWidth();
-        height = GetHeight();
-
-        tiles = new char[width * height];
-
-        for (int y = heightStartPos; y < height; y += heightStep)
-        {
-            for (int x = widthStartPos; x < width; x += widthStep)
-            {
-                SetTile(x, y, LevelGenerator.EMPTY);
-            }
-        }
-    }
-
-    public int GetWidth()
-    {
-        return width;
-    }
-
-    public int GetHeight()
-    {
-        return height;
-    }
-
-    public void SetHeight(int value)
-    {
-        height = value;
-    }
-
-    public void SetWidth(int value)
-    {
-        width = value;
-    }
-
-    public void SetStartHeightPos(int value)
-    {
-        heightStartPos = value;
-    }
-
-    public void SetStartWidthPos(int value)
-    {
-        widthStartPos = value;
-    }
-
-    public void SetHeightStep(int value)
-    {
-        heightStep = value;
-    }
-
-    public void SetWidthStep(int value)
-    {
-        widthStep = value;
-    }
-
-    public char[] GetTiles()
-    {
-        return tiles;
-    }
-
-    public char GetTile(int x, int y)
-    {
-        if (x < widthStartPos || y < heightStartPos || x >= GetWidth() || y >= GetHeight())
-        {
-            return LevelGenerator.EMPTY;
-        }
-
-        return tiles[x + y * GetWidth()];
-    }
-
-    public void SetTile(int x, int y, char tile)
-    {
-        tiles[x + y * GetWidth()] = tile;
+        Helper.UpdateColliderShapeToSprite(bossGO, bossSprite);
     }
 }

@@ -18,6 +18,8 @@ public class Boss : MonoBehaviour, IDamageable, IShooter
     public GameObject BossPrefab;
     public BossScriptable BossScriptable;
 
+    private UIManager uiManager;
+
     private GameController gameController;
 
     private BOSS_MOVE_STATE moveState = 0;
@@ -44,11 +46,14 @@ public class Boss : MonoBehaviour, IDamageable, IShooter
         boundLeft = Helper.GetScreenBoundLeft(cam);
         boundTop = Helper.GetScreenBoundTop(cam);
 
+        uiManager = FindObjectOfType<UIManager>();
+
         SpriteRenderer bossRenderer = BossPrefab.GetComponent<SpriteRenderer>();
         halfSpriteSize = new Vector2((bossRenderer.bounds.size.x / 2), (bossRenderer.bounds.size.y / 2));
 
         Health = BossScriptable.EnemyHealth;
         Damage = BossScriptable.EnemyDamage;
+
         timeBetweenShots = BossScriptable.TimeBetweenShots;
         shotMinAngle = BossScriptable.MinShotAngle;
         shotMaxAngle = BossScriptable.MaxShotAngle;
@@ -58,6 +63,11 @@ public class Boss : MonoBehaviour, IDamageable, IShooter
         bossRenderer.sprite = BossScriptable.EnemySprite;
 
         gameController = FindObjectOfType<GameController>();
+    }
+
+    private void Start()
+    {
+        uiManager.SetInititialBossHealth(BossScriptable.EnemyHealth);
     }
 
     void Update()
@@ -97,11 +107,12 @@ public class Boss : MonoBehaviour, IDamageable, IShooter
     public void TakeDamage(int damage)
     {
         Health -= damage;
+        uiManager.UpdateBossHealth(Health);
 
         if (Health <= 0)
         {
-            Destroy(gameObject);
             gameController.Enemies.Remove(gameObject);
+            Destroy(gameObject);
         }
     }
 

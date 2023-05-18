@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameController : MonoBehaviour
 {
@@ -8,11 +9,15 @@ public class GameController : MonoBehaviour
     public GameObject Boss;
     public BossScriptable BossScriptable;
 
+    public GameObject BossHealthBar;
+
     public LevelGenerator LevelGenerator;
 
     public int MaxNumberOfLevels;
 
     public List<GameObject> Enemies = new List<GameObject>();
+
+    [SerializeField]private int currentLevelNumber = 1;
 
     private void Update()
     {
@@ -20,15 +25,14 @@ public class GameController : MonoBehaviour
         {
             GameOver();
         }
+
+        //TODO Cimocs: for some reason after player beats the boss the levelNumber jumps straight to 10
     
         if (Enemies.Count <= 0)
         {
-            if (LevelGenerator.CurrentLevelNumber <= MaxNumberOfLevels)
+            if (currentLevelNumber <= MaxNumberOfLevels)
             {
                 NextLevel();
-
-                if (LevelGenerator.CurrentLevelNumber % 5 == 0)
-                BossLevel();
             }
             else
                 GameOver();
@@ -37,20 +41,43 @@ public class GameController : MonoBehaviour
 
     private void NextLevel()
     {
-        LevelGenerator.CurrentLevelNumber++;
+        currentLevelNumber++;
         ResetLevel();
     }
 
-    private void BossLevel()
-    {
-        LevelGenerator.CurrentLevelNumber++;
-        LevelGenerator.CreateBossLevel();
-    }
+    //private void BossLevel()
+    //{
+    //    LevelGenerator.CreateBossLevel();
+    //
+    //    BossHealthBar.SetActive(true);
+    //
+    //    Slider bossHealthSlider = BossHealthBar.GetComponent<Slider>();
+    //    if (bossHealthSlider.value <= 0)
+    //    {
+    //        BossHealthBar.SetActive(false);
+    //        LevelGenerator.CurrentLevelNumber++;
+    //    }
+    //}
 
     private void ResetLevel()
     {
-        LevelGenerator.NumOfEnemies = LevelGenerator.CurrentLevelNumber + LevelGenerator.NumOfEnemies;
-        LevelGenerator.CreateLevel();
+        if (currentLevelNumber % 5 == 0)
+        {
+            LevelGenerator.CreateBossLevel();
+            BossHealthBar.SetActive(true);
+
+            Slider bossHealthSlider = BossHealthBar.GetComponent<Slider>();
+            if (bossHealthSlider.value <= 0)
+            {
+                BossHealthBar.SetActive(false);
+            }
+        }
+        else
+        {
+            BossHealthBar.SetActive(false); 
+            LevelGenerator.NumOfEnemies = currentLevelNumber + LevelGenerator.NumOfEnemies;
+            LevelGenerator.CreateLevel();
+        }
     }
 
     private void GameOver()

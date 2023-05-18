@@ -89,8 +89,8 @@ public class Enemy : MonoBehaviour, IDamageable, IShooter
 
         if (Health <= 0)
         {
-            Destroy(gameObject);
             gameController.Enemies.Remove(gameObject);
+            Destroy(gameObject);
         }
     }
 
@@ -118,7 +118,7 @@ public class Enemy : MonoBehaviour, IDamageable, IShooter
 
     private void Move()
     {
-        moveTimer = 0.5f;
+        moveTimer = 0.3f;
 
         if (transform.position.x >= boundRight - halfSpriteSize.x)
         {
