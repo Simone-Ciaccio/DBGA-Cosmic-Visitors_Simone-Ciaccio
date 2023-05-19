@@ -63,7 +63,7 @@ public class Bullet : MonoBehaviour
             if (hit.collider.gameObject.CompareTag(bossTag) && this.CompareTag(playerBulletTag))
             {
                 Boss boss = hit.collider.GetComponent<Boss>();
-                int enemyDamage = boss.BossScriptable.EnemyDamage;
+                int enemyDamage = boss.BossScriptable.BossDamage;
 
                 boss.TakeDamage(enemyDamage);
 

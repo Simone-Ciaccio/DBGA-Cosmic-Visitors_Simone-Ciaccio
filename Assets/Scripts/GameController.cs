@@ -17,7 +17,7 @@ public class GameController : MonoBehaviour
 
     public List<GameObject> Enemies = new List<GameObject>();
 
-    [SerializeField]private int currentLevelNumber = 1;
+    [SerializeField]private int currentLevelNumber = 0;
 
     private void Update()
     {
@@ -25,12 +25,10 @@ public class GameController : MonoBehaviour
         {
             GameOver();
         }
-
-        //TODO Cimocs: for some reason after player beats the boss the levelNumber jumps straight to 10
     
         if (Enemies.Count <= 0)
         {
-            if (currentLevelNumber <= MaxNumberOfLevels)
+            if (currentLevelNumber < MaxNumberOfLevels)
             {
                 NextLevel();
             }
@@ -42,35 +40,11 @@ public class GameController : MonoBehaviour
     private void NextLevel()
     {
         currentLevelNumber++;
-        ResetLevel();
-    }
 
-    //private void BossLevel()
-    //{
-    //    LevelGenerator.CreateBossLevel();
-    //
-    //    BossHealthBar.SetActive(true);
-    //
-    //    Slider bossHealthSlider = BossHealthBar.GetComponent<Slider>();
-    //    if (bossHealthSlider.value <= 0)
-    //    {
-    //        BossHealthBar.SetActive(false);
-    //        LevelGenerator.CurrentLevelNumber++;
-    //    }
-    //}
-
-    private void ResetLevel()
-    {
         if (currentLevelNumber % 5 == 0)
         {
-            LevelGenerator.CreateBossLevel();
             BossHealthBar.SetActive(true);
-
-            Slider bossHealthSlider = BossHealthBar.GetComponent<Slider>();
-            if (bossHealthSlider.value <= 0)
-            {
-                BossHealthBar.SetActive(false);
-            }
+            LevelGenerator.CreateBossLevel();
         }
         else
         {

@@ -41,6 +41,8 @@ public class Boss : MonoBehaviour, IDamageable, IShooter
     private void Awake()
     {
         cam = Camera.main;
+        
+        gameController = FindObjectOfType<GameController>();
 
         boundRight = Helper.GetScreenBoundRight(cam);
         boundLeft = Helper.GetScreenBoundLeft(cam);
@@ -48,26 +50,24 @@ public class Boss : MonoBehaviour, IDamageable, IShooter
 
         uiManager = FindObjectOfType<UIManager>();
 
-        SpriteRenderer bossRenderer = BossPrefab.GetComponent<SpriteRenderer>();
-        halfSpriteSize = new Vector2((bossRenderer.bounds.size.x / 2), (bossRenderer.bounds.size.y / 2));
+        Health = BossScriptable.BossHealth;
+        Damage = BossScriptable.BossDamage;
+    }
 
-        Health = BossScriptable.EnemyHealth;
-        Damage = BossScriptable.EnemyDamage;
+    private void Start()
+    {
+        uiManager.SetInititialBossHealth(BossScriptable.BossHealth);
+        
+        SpriteRenderer bossRenderer = BossPrefab.GetComponent<SpriteRenderer>();
+        bossRenderer.sprite = BossScriptable.BossSprite;
+
+        halfSpriteSize = new Vector2((bossRenderer.bounds.size.x / 2), (bossRenderer.bounds.size.y / 2));
 
         timeBetweenShots = BossScriptable.TimeBetweenShots;
         shotMinAngle = BossScriptable.MinShotAngle;
         shotMaxAngle = BossScriptable.MaxShotAngle;
         numberOfBullets = BossScriptable.NumberOfBullets;
-        bulletPrefab = BossScriptable.EnemyBulletPrefab;
-
-        bossRenderer.sprite = BossScriptable.EnemySprite;
-
-        gameController = FindObjectOfType<GameController>();
-    }
-
-    private void Start()
-    {
-        uiManager.SetInititialBossHealth(BossScriptable.EnemyHealth);
+        bulletPrefab = BossScriptable.BossBulletPrefab;
     }
 
     void Update()
@@ -94,7 +94,7 @@ public class Boss : MonoBehaviour, IDamageable, IShooter
             bulletGO.tag = enemyBulletTag;
         
             SpriteRenderer bulletRenderer = bulletGO.GetComponent<SpriteRenderer>();
-            bulletRenderer.sprite = BossScriptable.EnemyBulletSprite;
+            bulletRenderer.sprite = BossScriptable.BossBulletSprite;
             Sprite bulletSprite = bulletRenderer.sprite;
             Helper.UpdateColliderShapeToSprite(bulletGO, bulletSprite);
         
@@ -131,7 +131,7 @@ public class Boss : MonoBehaviour, IDamageable, IShooter
 
         if (transform.position.y >= boundTop - halfSpriteSize.y)
         {
-            transform.position = new Vector3(transform.position.x, boundTop - (halfSpriteSize.y * 2) - 1.5f, transform.position.z);
+            transform.position = new Vector3(transform.position.x, boundTop - halfSpriteSize.y, transform.position.z);
         }
 
         switch (moveState)

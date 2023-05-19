@@ -54,7 +54,7 @@ public class Helper
         return screenTopRight.y;
     }
 
-    public static float ScreenBoundBottom(Camera cam)
+    public static float GetScreenBoundBottom(Camera cam)
     {
         Vector2 screenBottomLeft = cam.ScreenToWorldPoint(Vector2.zero);
 

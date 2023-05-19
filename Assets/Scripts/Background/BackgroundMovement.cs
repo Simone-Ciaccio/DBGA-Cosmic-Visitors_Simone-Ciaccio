@@ -4,20 +4,38 @@ using UnityEngine;
 
 public class BackgroundMovement : MonoBehaviour
 {
-    public List<GameObject> backgroundImages = new List<GameObject>();
+    [SerializeField] private List<GameObject> backgroundImages = new List<GameObject>();
 
-    public float BackgroundSpeed;
+    Camera cam;
+
+    private float BackgroundSpeed = 1.0f;
+
+    private float backgroundImageHeight;
+    private float boundTop;
+    private float boundBottom;
+
+    private void Awake()
+    {
+        cam = Camera.main;
+
+        SpriteRenderer backgroundSR = backgroundImages[0].GetComponent<SpriteRenderer>();
+        backgroundImageHeight = backgroundSR.sprite.bounds.size.y;
+
+        boundTop = Helper.GetScreenBoundTop(cam);
+        boundBottom = Helper.GetScreenBoundBottom(cam);
+    }
 
     private void Update()
     {
         for(int i = 0; i < backgroundImages.Count; i++)
         {
-            backgroundImages[i].transform.localPosition += BackgroundSpeed * Time.deltaTime * Vector3.down;
+            backgroundImages[i].transform.position += BackgroundSpeed * Time.deltaTime * Vector3.down;
 
-            if (backgroundImages[i].transform.localPosition.y < -12.65f)
+            if (backgroundImages[i].transform.position.y < boundBottom - backgroundImageHeight / 2)
             {
-                backgroundImages[i].transform.localPosition = new Vector3(backgroundImages[i].transform.localPosition.x, 15.36f,
-                                                                                backgroundImages[i].transform.localPosition.z);
+                backgroundImages[i].transform.position = new Vector3(backgroundImages[i].transform.position.x,
+                    boundTop + backgroundImageHeight / 2,
+                    backgroundImages[i].transform.position.z);
             }
         }
     }

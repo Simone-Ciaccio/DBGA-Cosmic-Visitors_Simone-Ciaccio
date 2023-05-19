@@ -50,7 +50,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: a50e3d74a8d65ef4cac50fadc472d9da, type: 2}
   - {fileID: 11400000, guid: b6ad85638eeb21847ace96b995ef2a39, type: 2}
   bulletPrefab: {fileID: 1009538351760812735, guid: 19737653c1799df41a90f357216a744e, type: 3}
-  EnemyScriptable: {fileID: 0}
+  EnemyScriptable: {fileID: 11400000, guid: b6ad85638eeb21847ace96b995ef2a39, type: 2}
 --- !u!212 &790615873503631264
 SpriteRenderer:
   m_ObjectHideFlags: 0

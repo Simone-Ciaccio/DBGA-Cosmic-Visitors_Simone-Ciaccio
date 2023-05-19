@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using UnityEngine;
 
 public class LevelGenerator : MonoBehaviour
@@ -64,7 +63,7 @@ public class LevelGenerator : MonoBehaviour
                 {
                     SetTile(tileIndexToCheck, ENEMY);
                     Vector2 tilePosition = tiles.ElementAt(tileIndexToCheck).Key;
-                    SpawnEnemy(tilePosition);
+                    SpawnEnemy(EnemyPrefab, tilePosition);
                     currentNumOfEnemies++;
                 }
             }
@@ -101,12 +100,12 @@ public class LevelGenerator : MonoBehaviour
     public void CreateBossLevel()
     {
         Vector3 spawnPosition = new Vector3((boundRight / 2), boundTop, 0);
-        SpawnBoss(spawnPosition);
+        SpawnEnemy(BossPrefab, spawnPosition);
     }
 
-    private void SpawnEnemy(Vector3 position)
+    private void SpawnEnemy(GameObject prefab, Vector3 position)
     {
-        GameObject enemyGO = Instantiate(EnemyPrefab, position, Quaternion.identity);
+        GameObject enemyGO = Instantiate(prefab, position, Quaternion.identity);
 
         GameController.Enemies.Add(enemyGO);
 
@@ -114,17 +113,5 @@ public class LevelGenerator : MonoBehaviour
         Sprite enemySprite = enemyRenderer.sprite;
 
         Helper.UpdateColliderShapeToSprite(enemyGO, enemySprite);
-    }
-
-    private void SpawnBoss(Vector3 position)
-    {
-        GameObject bossGO = Instantiate(BossPrefab, position, Quaternion.identity);
-
-        GameController.Enemies.Add(bossGO);
-
-        SpriteRenderer bossRenderer = bossGO.GetComponent<SpriteRenderer>();
-        Sprite bossSprite = bossRenderer.sprite;
-
-        Helper.UpdateColliderShapeToSprite(bossGO, bossSprite);
     }
 }

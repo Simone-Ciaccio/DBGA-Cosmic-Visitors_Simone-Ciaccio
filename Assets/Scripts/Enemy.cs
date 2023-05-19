@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -21,7 +22,7 @@ public class Enemy : MonoBehaviour, IDamageable, IShooter
     private ENEMY_MOVE_STATE moveState = 0;
     private float moveHorizontalAmount = 0.5f;
     private float moveVerticalAmount;
-    private float moveTimer = 0.1f;
+    private float moveTimer = 0.4f;
     private bool moveRight = true;
 
     private Vector2 halfSpriteSize;
@@ -57,6 +58,10 @@ public class Enemy : MonoBehaviour, IDamageable, IShooter
         EnemyScriptable = Helper.RandomArrayValue(Enemies);
         Health = EnemyScriptable.EnemyHealth;
         Damage = EnemyScriptable.EnemyDamage;
+    }
+
+    private void Start()
+    {
         spriteRenderer.sprite = EnemyScriptable.EnemySprite;
         halfSpriteSize = new Vector2(spriteRenderer.bounds.size.x / 2, spriteRenderer.bounds.size.y / 2);
         moveVerticalAmount = halfSpriteSize.y * 2;
@@ -118,7 +123,7 @@ public class Enemy : MonoBehaviour, IDamageable, IShooter
 
     private void Move()
     {
-        moveTimer = 0.3f;
+        moveTimer = 0.4f;
 
         if (transform.position.x >= boundRight - halfSpriteSize.x)
         {

@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88594ae204e375c4b86b74e1b7f6513c, type: 3}
   m_Name: New Boss
   m_EditorClassIdentifier: 
-  EnemyHealth: 20
-  EnemyDamage: 1
-  EnemySprite: {fileID: 1327786387, guid: fd688a39302efa746b722caeb0a9d287, type: 3}
-  EnemyBulletPrefab: {fileID: 1009538351760812735, guid: 19737653c1799df41a90f357216a744e, type: 3}
-  EnemyBulletSprite: {fileID: -1857480278, guid: f706babab9dc9b249a8b05fb523216ca, type: 3}
-  TimeBetweenShots: 0.3
+  BossHealth: 15
+  BossDamage: 1
+  BossSprite: {fileID: 1327786387, guid: fd688a39302efa746b722caeb0a9d287, type: 3}
+  BossBulletPrefab: {fileID: 1009538351760812735, guid: 19737653c1799df41a90f357216a744e, type: 3}
+  BossBulletSprite: {fileID: -1857480278, guid: f706babab9dc9b249a8b05fb523216ca, type: 3}
+  TimeBetweenShots: 0.5
   NumberOfBullets: 5
-  MinShotAngle: -60
-  MaxShotAngle: 60
+  MinShotAngle: -50
+  MaxShotAngle: 50

@@ -19,5 +19,5 @@ MonoBehaviour:
   EnemyBulletSprite: {fileID: -1857480278, guid: f706babab9dc9b249a8b05fb523216ca, type: 3}
   TimeBetweenShots: 1.5
   NumberOfBullets: 3
-  MinShotAngle: -30
-  MaxShotAngle: 30
+  MinShotAngle: -45
+  MaxShotAngle: 45
