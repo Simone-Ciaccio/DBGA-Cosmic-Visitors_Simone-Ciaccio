@@ -13,11 +13,13 @@ public class Enemy : MonoBehaviour, IDamageable, IShooter
     public EnemyScriptable EnemyScriptable;
 
     private GameController gameController;
-
     private Camera cam;
+    private Player player;
+
     private float boundRight;
     private float boundLeft;
     private float boundTop;
+    private float boundBottom;
 
     private ENEMY_MOVE_STATE moveState = 0;
     private float moveHorizontalAmount = 0.5f;
@@ -46,6 +48,7 @@ public class Enemy : MonoBehaviour, IDamageable, IShooter
 
     private void Awake()
     {
+        player = FindObjectOfType<Player>();
         gameController = FindObjectOfType<GameController>();
 
         cam = Camera.main;
@@ -53,19 +56,21 @@ public class Enemy : MonoBehaviour, IDamageable, IShooter
         boundRight = Helper.GetScreenBoundRight(cam);
         boundLeft = Helper.GetScreenBoundLeft(cam);
         boundTop = Helper.GetScreenBoundTop(cam);
+        boundBottom = Helper.GetScreenBoundBottom(cam);
 
         spriteRenderer = GetComponent<SpriteRenderer>();
+        halfSpriteSize = new Vector2(spriteRenderer.bounds.size.x / 2, spriteRenderer.bounds.size.y / 2);
+        moveVerticalAmount = halfSpriteSize.y * 2;
+
         EnemyScriptable = Helper.RandomArrayValue(Enemies);
-        Health = EnemyScriptable.EnemyHealth;
-        Damage = EnemyScriptable.EnemyDamage;
     }
 
     private void Start()
     {
         spriteRenderer.sprite = EnemyScriptable.EnemySprite;
-        halfSpriteSize = new Vector2(spriteRenderer.bounds.size.x / 2, spriteRenderer.bounds.size.y / 2);
-        moveVerticalAmount = halfSpriteSize.y * 2;
-
+        
+        Health = EnemyScriptable.EnemyHealth;
+        Damage = EnemyScriptable.EnemyDamage;
         numberOfBullets = EnemyScriptable.NumberOfBullets;
         shotMinAngle = EnemyScriptable.MinShotAngle;
         shotMaxAngle = EnemyScriptable.MaxShotAngle;
@@ -110,14 +115,9 @@ public class Enemy : MonoBehaviour, IDamageable, IShooter
 
             bulletGO.tag = enemyBulletTag;
 
-            SpriteRenderer bulletRenderer = bulletGO.GetComponent<SpriteRenderer>();
-            bulletRenderer.sprite = EnemyScriptable.EnemyBulletSprite;
-            Sprite bulletSprite = bulletRenderer.sprite;
-            Helper.UpdateColliderShapeToSprite(bulletGO, bulletSprite);
-            
-            float angleToShoot = angleStep - (i * angleStep);
             Bullet bullet = bulletGO.GetComponent<Bullet>();
-            bullet.SetBulletDirection(Vector3.down, angleToShoot);
+
+            bullet.SetbulletData(bulletGO, EnemyScriptable.EnemyBulletSprite, Vector3.down, angleStep - (i * angleStep));
         }
     }
 
@@ -143,21 +143,26 @@ public class Enemy : MonoBehaviour, IDamageable, IShooter
             transform.position = new Vector3(transform.position.x, halfSpriteSize.y, transform.position.z);
         }
 
+        if (transform.position.y < boundBottom + halfSpriteSize.y)
+        {
+            player.Lives--;
+        }
+
         switch (moveState)
         {
             case ENEMY_MOVE_STATE.NO_MOVE:
                 break;
 
             case ENEMY_MOVE_STATE.MOVE_RIGHT:
-                transform.position += new Vector3(moveHorizontalAmount, 0, 0);
+                transform.Translate(new Vector3(moveHorizontalAmount, 0, 0));
                 break;
 
             case ENEMY_MOVE_STATE.MOVE_LEFT:
-                transform.position += new Vector3(-moveHorizontalAmount, 0, 0);
+                transform.Translate(new Vector3(-moveHorizontalAmount, 0, 0));
                 break;
 
             case ENEMY_MOVE_STATE.MOVE_DOWN:
-                transform.position += new Vector3(0, -moveVerticalAmount, 0);
+                transform.Translate(new Vector3(0, -moveVerticalAmount, 0));
 
                 if (moveRight)
                 {

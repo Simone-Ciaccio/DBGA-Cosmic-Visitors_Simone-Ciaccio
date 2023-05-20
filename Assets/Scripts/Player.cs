@@ -23,8 +23,6 @@ public class Player : MonoBehaviour, IDamageable, IShooter
     private SpriteRenderer bulletRenderer;
     private Vector3 bulletSpawnOffset = Vector3.up;
 
-    private string enemyTag = "Enemy";
-
     private Vector3 startingPosition; 
 
     private void Awake()
@@ -32,7 +30,7 @@ public class Player : MonoBehaviour, IDamageable, IShooter
         Health = PlayerHealth;
         Damage = PlayerDamage;
         uiManager.SetInititialPlayerHealth(PlayerHealth);
-
+        uiManager.UpdatePlayerLives(Lives);
 
         startingPosition = transform.position;
 
@@ -59,7 +57,10 @@ public class Player : MonoBehaviour, IDamageable, IShooter
         {
             Health = PlayerHealth;
             uiManager.UpdatePlayerHealth(PlayerHealth);
+
             Lives--;
+            uiManager.UpdatePlayerLives(Lives);
+
             transform.position = startingPosition;
 
             if(Lives <= 0)
@@ -75,13 +76,5 @@ public class Player : MonoBehaviour, IDamageable, IShooter
         playerBullet.tag = playerBulletTag;
         Bullet bullet = playerBullet.GetComponent<Bullet>();
         bullet.BulletDirection = Vector3.up;
-    }
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.CompareTag(enemyTag))
-        {
-            Lives--;
-        }
     }
 }

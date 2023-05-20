@@ -25,8 +25,7 @@ public class Bullet : MonoBehaviour
     {
         bulletDestroyTimer -= Time.deltaTime;
 
-        transform.position += BulletSpeed * Time.deltaTime * BulletDirection.normalized;
-
+        transform.Translate(BulletSpeed * Time.deltaTime * BulletDirection.normalized);
 
         if (bulletDestroyTimer <= 0)
         {
@@ -72,9 +71,20 @@ public class Bullet : MonoBehaviour
         }
     }
 
-    public void SetBulletDirection(Vector3 baseDirection, float angle)
+    public void SetBulletDirection(Vector3 generalDirection, float angle)
     {
-        Vector3 bulletDirection = Quaternion.Euler(0, 0, angle) * baseDirection;
+        Vector3 bulletDirection = Quaternion.Euler(0, 0, angle) * generalDirection;
         BulletDirection = bulletDirection;
+    }
+
+    public void SetbulletData(GameObject bulletGO, Sprite bulletSprite, Vector3 generalDirection, float angleToShoot)
+    {
+        SpriteRenderer bulletRenderer = bulletGO.GetComponent<SpriteRenderer>();
+        bulletRenderer.sprite = bulletSprite;
+
+        Helper.UpdateColliderShapeToSprite(bulletGO, bulletSprite);
+
+        Bullet bullet = bulletGO.GetComponent<Bullet>();
+        bullet.SetBulletDirection(generalDirection, angleToShoot);
     }
 }

@@ -92,15 +92,18 @@ public class Boss : MonoBehaviour, IDamageable, IShooter
             GameObject bulletGO = Instantiate(bulletPrefab, transform.position + bulletSpawnOffset, Quaternion.identity);
         
             bulletGO.tag = enemyBulletTag;
-        
-            SpriteRenderer bulletRenderer = bulletGO.GetComponent<SpriteRenderer>();
-            bulletRenderer.sprite = BossScriptable.BossBulletSprite;
-            Sprite bulletSprite = bulletRenderer.sprite;
-            Helper.UpdateColliderShapeToSprite(bulletGO, bulletSprite);
-        
-            float angleToShoot = angleStep - (i * angleStep);
+
             Bullet bullet = bulletGO.GetComponent<Bullet>();
-            bullet.SetBulletDirection(Vector3.down, angleToShoot);
+            bullet.SetbulletData(bulletGO, BossScriptable.BossBulletSprite, Vector3.down, angleStep - (i * angleStep));
+        
+            //SpriteRenderer bulletRenderer = bulletGO.GetComponent<SpriteRenderer>();
+            //bulletRenderer.sprite = BossScriptable.BossBulletSprite;
+            //Sprite bulletSprite = bulletRenderer.sprite;
+            //Helper.UpdateColliderShapeToSprite(bulletGO, bulletSprite);
+            //
+            //float angleToShoot = angleStep - (i * angleStep);
+            //Bullet bullet = bulletGO.GetComponent<Bullet>();
+            //bullet.SetBulletDirection(Vector3.down, angleToShoot);
         }
     }
 

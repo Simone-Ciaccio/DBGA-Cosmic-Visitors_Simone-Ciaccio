@@ -33,7 +33,7 @@ public class PlayerInput : MonoBehaviour
 
     private void Update()
     {
-        transform.position += input * MoveSpeed * Time.deltaTime * Vector3.right;
+        transform.Translate(input * MoveSpeed * Time.deltaTime * Vector3.right);
 
         if (transform.position.x > boundRight - halfSpriteSize.x)
         {

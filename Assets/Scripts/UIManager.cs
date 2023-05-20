@@ -7,6 +7,8 @@ public class UIManager : MonoBehaviour
 {
     public Slider PlayerHealthBar;
 
+    public List<GameObject> PlayerLives = new List<GameObject>();
+
     public Slider BossHealthBar;
 
     public void SetInititialPlayerHealth(int maxPlayerHealth)
@@ -29,5 +31,13 @@ public class UIManager : MonoBehaviour
     public void UpdateBossHealth(int currentHealth)
     {
         BossHealthBar.value = currentHealth;
+    }
+
+    public void UpdatePlayerLives(int playerLives)
+    {
+        for (int i = PlayerLives.Count - 1; i >= 0; i--)
+        {
+            PlayerLives[i].SetActive(playerLives > i);
+        }
     }
 }
