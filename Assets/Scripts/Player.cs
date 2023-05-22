@@ -16,8 +16,6 @@ public class Player : MonoBehaviour, IDamageable, IShooter
     public Sprite BulletSprite;
     public float TimeBetweenBullets;
 
-    [SerializeField] private UIManager uiManager;
-
     private float shootTimer;
     private string playerBulletTag = "PlayerBullet";
     private SpriteRenderer bulletRenderer;
@@ -29,8 +27,8 @@ public class Player : MonoBehaviour, IDamageable, IShooter
     {
         Health = PlayerHealth;
         Damage = PlayerDamage;
-        uiManager.SetInititialPlayerHealth(PlayerHealth);
-        uiManager.UpdatePlayerLives(Lives);
+        UIManager.Instance.SetInititialPlayerHealth(PlayerHealth);
+        UIManager.Instance.UpdatePlayerLives(Lives);
 
         startingPosition = transform.position;
 
@@ -51,15 +49,15 @@ public class Player : MonoBehaviour, IDamageable, IShooter
     {
         Health -= damage;
 
-        uiManager.UpdatePlayerHealth(Health);
+        UIManager.Instance.UpdatePlayerHealth(Health);
 
         if (Health <= 0)
         {
             Health = PlayerHealth;
-            uiManager.UpdatePlayerHealth(PlayerHealth);
+            UIManager.Instance.UpdatePlayerHealth(PlayerHealth);
 
             Lives--;
-            uiManager.UpdatePlayerLives(Lives);
+            UIManager.Instance.UpdatePlayerLives(Lives);
 
             transform.position = startingPosition;
 

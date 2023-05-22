@@ -2,11 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Controls;
 
 public class PlayerInput : MonoBehaviour
 {
-    public float MoveSpeed = 5;
+    public float MoveSpeed;
     public InputAction MoveAction;
+    public InputAction PauseAction;
 
     private Camera cam;
     private float boundRight;
@@ -29,6 +31,8 @@ public class PlayerInput : MonoBehaviour
 
         MoveAction.performed += OnMovePerformed;
         MoveAction.canceled += OnMoveCancelled;
+
+        PauseAction.performed += OnPauseActionPerformed;
     }
 
     private void Update()
@@ -48,11 +52,13 @@ public class PlayerInput : MonoBehaviour
     private void OnEnable()
     {
         MoveAction.Enable();
+        PauseAction.Enable();
     }
 
     private void OnDisable()
     {
         MoveAction.Disable();
+        PauseAction.Disable();
     }
 
     private void OnMovePerformed(InputAction.CallbackContext context)
@@ -63,5 +69,10 @@ public class PlayerInput : MonoBehaviour
     private void OnMoveCancelled(InputAction.CallbackContext context)
     {
         input = 0;
+    }
+
+    public void OnPauseActionPerformed(InputAction.CallbackContext context)
+    {
+        GameController.Instance.GameState = GameController.GAME_STATE.PAUSE_STATE;
     }
 }

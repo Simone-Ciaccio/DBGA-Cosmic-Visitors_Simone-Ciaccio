@@ -5,8 +5,6 @@ using UnityEngine;
 
 public class LevelGenerator : MonoBehaviour
 {
-    public GameController GameController;
-
     public GameObject EnemyPrefab;
     public GameObject BossPrefab;
 
@@ -107,7 +105,7 @@ public class LevelGenerator : MonoBehaviour
     {
         GameObject enemyGO = Instantiate(prefab, position, Quaternion.identity);
 
-        GameController.Enemies.Add(enemyGO);
+        GameController.Instance.Enemies.Add(enemyGO);
 
         SpriteRenderer enemyRenderer = enemyGO.GetComponent<SpriteRenderer>();
         Sprite enemySprite = enemyRenderer.sprite;

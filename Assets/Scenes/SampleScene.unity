@@ -206,7 +206,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 33422665}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 991059247}
+        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+        m_MethodName: ResumeGame
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &33422665
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -746,7 +758,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73ef3f90ea6683a4ebf0c9c45994dc33, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GameController: {fileID: 793651445}
   EnemyPrefab: {fileID: 4148327755893180866, guid: 6d55e98036743194d8a3f1195e130c9d, type: 3}
   BossPrefab: {fileID: 2481275108197580887, guid: 4ba7777bfa3416b4c82847ca18181097, type: 3}
   NumOfEnemies: 5
@@ -1298,7 +1309,7 @@ MonoBehaviour:
   LevelGenerator: {fileID: 409670857}
   MaxNumberOfLevels: 10
   Enemies: []
-  currentLevelNumber: 0
+  GameState: 0
 --- !u!1 &804406488
 GameObject:
   m_ObjectHideFlags: 0
@@ -1517,7 +1528,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 852611820}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 991059247}
+        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+        m_MethodName: ExitGame
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &852611820
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1951,6 +1974,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 16502dbfa14c8ae4786e4fea6190223a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  GameStartPanel: {fileID: 699602493}
+  InGamePanel: {fileID: 1528388238}
+  GamePausePanel: {fileID: 1135718287}
+  GameOverPanel: {fileID: 747916285}
   PlayerHealthBar: {fileID: 1622471153}
   PlayerLives:
   - {fileID: 1827511364}
@@ -1959,6 +1986,8 @@ MonoBehaviour:
   - {fileID: 1465912270}
   - {fileID: 1567018856}
   BossHealthBar: {fileID: 994305428}
+  GameOverWinText: {fileID: 1445345966}
+  GameOverLoseText: {fileID: 1850933069}
 --- !u!1 &994305426
 GameObject:
   m_ObjectHideFlags: 0
@@ -2519,7 +2548,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1159253943}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 991059247}
+        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+        m_MethodName: StartGame
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1159253943
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2641,7 +2682,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1224023740}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 991059247}
+        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+        m_MethodName: StartGame
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1224023740
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2763,7 +2816,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1403874352}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 991059247}
+        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+        m_MethodName: ExitGame
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1403874352
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4320,7 +4385,6 @@ MonoBehaviour:
   BulletPrefab: {fileID: 1009538351760812735, guid: 19737653c1799df41a90f357216a744e, type: 3}
   BulletSprite: {fileID: 1791733142, guid: f706babab9dc9b249a8b05fb523216ca, type: 3}
   TimeBetweenBullets: 0.4
-  uiManager: {fileID: 0}
 --- !u!212 &2113104069
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -4462,7 +4526,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a11a2c3a9c58702469c0feb3fadb7abb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MoveSpeed: 7.5
+  MoveSpeed: 7
   MoveAction:
     m_Name: Move
     m_Type: 0
@@ -4519,6 +4583,23 @@ MonoBehaviour:
       m_Groups: 
       m_Action: Move
       m_Flags: 8
+    m_Flags: 0
+  PauseAction:
+    m_Name: Pause
+    m_Type: 1
+    m_ExpectedControlType: Button
+    m_Id: 7116c3ff-4373-4c54-82b7-ab9a4a6c7543
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: 40430c0e-18e7-4f67-bf0d-07f44e4a030e
+      m_Path: <Keyboard>/escape
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Pause
+      m_Flags: 0
     m_Flags: 0
 --- !u!50 &2113104073
 Rigidbody2D:

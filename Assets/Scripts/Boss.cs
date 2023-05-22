@@ -6,6 +6,7 @@ public class Boss : MonoBehaviour, IDamageable, IShooter
 {
     public int Health { get; set; }
     public int Damage { get; set; }
+
     public float speed;
 
     private enum BOSS_MOVE_STATE
@@ -17,10 +18,6 @@ public class Boss : MonoBehaviour, IDamageable, IShooter
 
     public GameObject BossPrefab;
     public BossScriptable BossScriptable;
-
-    private UIManager uiManager;
-
-    private GameController gameController;
 
     private BOSS_MOVE_STATE moveState = 0;
 
@@ -41,14 +38,10 @@ public class Boss : MonoBehaviour, IDamageable, IShooter
     private void Awake()
     {
         cam = Camera.main;
-        
-        gameController = FindObjectOfType<GameController>();
 
         boundRight = Helper.GetScreenBoundRight(cam);
         boundLeft = Helper.GetScreenBoundLeft(cam);
         boundTop = Helper.GetScreenBoundTop(cam);
-
-        uiManager = FindObjectOfType<UIManager>();
 
         Health = BossScriptable.BossHealth;
         Damage = BossScriptable.BossDamage;
@@ -56,7 +49,7 @@ public class Boss : MonoBehaviour, IDamageable, IShooter
 
     private void Start()
     {
-        uiManager.SetInititialBossHealth(BossScriptable.BossHealth);
+        UIManager.Instance.SetInititialBossHealth(BossScriptable.BossHealth);
         
         SpriteRenderer bossRenderer = BossPrefab.GetComponent<SpriteRenderer>();
         bossRenderer.sprite = BossScriptable.BossSprite;
@@ -95,26 +88,17 @@ public class Boss : MonoBehaviour, IDamageable, IShooter
 
             Bullet bullet = bulletGO.GetComponent<Bullet>();
             bullet.SetbulletData(bulletGO, BossScriptable.BossBulletSprite, Vector3.down, angleStep - (i * angleStep));
-        
-            //SpriteRenderer bulletRenderer = bulletGO.GetComponent<SpriteRenderer>();
-            //bulletRenderer.sprite = BossScriptable.BossBulletSprite;
-            //Sprite bulletSprite = bulletRenderer.sprite;
-            //Helper.UpdateColliderShapeToSprite(bulletGO, bulletSprite);
-            //
-            //float angleToShoot = angleStep - (i * angleStep);
-            //Bullet bullet = bulletGO.GetComponent<Bullet>();
-            //bullet.SetBulletDirection(Vector3.down, angleToShoot);
         }
     }
 
     public void TakeDamage(int damage)
     {
         Health -= damage;
-        uiManager.UpdateBossHealth(Health);
+        UIManager.Instance.UpdateBossHealth(Health);
 
         if (Health <= 0)
         {
-            gameController.Enemies.Remove(gameObject);
+            GameController.Instance.Enemies.Remove(gameObject);
             Destroy(gameObject);
         }
     }

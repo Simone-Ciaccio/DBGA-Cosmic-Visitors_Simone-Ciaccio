@@ -12,7 +12,6 @@ public class Enemy : MonoBehaviour, IDamageable, IShooter
     public GameObject bulletPrefab;
     public EnemyScriptable EnemyScriptable;
 
-    private GameController gameController;
     private Camera cam;
     private Player player;
 
@@ -49,7 +48,6 @@ public class Enemy : MonoBehaviour, IDamageable, IShooter
     private void Awake()
     {
         player = FindObjectOfType<Player>();
-        gameController = FindObjectOfType<GameController>();
 
         cam = Camera.main;
 
@@ -99,7 +97,7 @@ public class Enemy : MonoBehaviour, IDamageable, IShooter
 
         if (Health <= 0)
         {
-            gameController.Enemies.Remove(gameObject);
+            GameController.Instance.Enemies.Remove(gameObject);
             Destroy(gameObject);
         }
     }
