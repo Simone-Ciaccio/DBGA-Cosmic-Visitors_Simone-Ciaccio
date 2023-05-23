@@ -28,6 +28,11 @@ public class GameController : MonoSingleton<GameController>
 
     private int currentLevelNumber = 0;
 
+    private void OnEnable()
+    {
+        
+    }
+
     private void Update()
     {
         switch (GameState)
@@ -55,6 +60,7 @@ public class GameController : MonoSingleton<GameController>
         currentLevelNumber = 0;
 
         Player.Lives = 3;
+        Player.gameObject.transform.position = Player.PlayerStartingPosition;
 
         if (Enemies.Count > 0)
         {
@@ -93,6 +99,8 @@ public class GameController : MonoSingleton<GameController>
 
     private void GamePlaying()
     {
+        EventManager.Instance.GameStarted();
+
         UIManager.Instance.GameStartPanel.SetActive(false);
         UIManager.Instance.GamePausePanel.SetActive(false);
         UIManager.Instance.InGamePanel.SetActive(true);
@@ -152,13 +160,15 @@ public class GameController : MonoSingleton<GameController>
         currentLevelNumber++;
 
         if (currentLevelNumber % 5 == 0)
-        { 
-            BossHealthBar.SetActive(true);
-            LevelGenerator.CreateBossLevel();
+        {
+            EventManager.Instance.StartBossLevelEvent();
+            //BossHealthBar.SetActive(true);
+            //LevelGenerator.CreateBossLevel();
         }
         else
         {
-            BossHealthBar.SetActive(false); 
+            EventManager.Instance.StartNormalLevelEvent();
+            //BossHealthBar.SetActive(false); 
             LevelGenerator.NumOfEnemies = currentLevelNumber + LevelGenerator.NumOfEnemies;
             LevelGenerator.CreateLevel();
         }

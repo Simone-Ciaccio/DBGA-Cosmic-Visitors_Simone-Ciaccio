@@ -26,6 +26,18 @@ public class LevelGenerator : MonoBehaviour
 
     private Dictionary<Vector2, char> tiles = new Dictionary<Vector2, char>();
 
+    private void OnEnable()
+    {
+        EventManager.Instance.OnNormalLevelStart += CreateLevel;
+        EventManager.Instance.OnBossLevelStart += CreateBossLevel;
+    }
+
+    private void OnDisable()
+    {
+        EventManager.Instance.OnNormalLevelStart -= CreateLevel;
+        EventManager.Instance.OnBossLevelStart -= CreateBossLevel;
+    }
+
     private void Awake()
     {
         cam = Camera.main;

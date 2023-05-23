@@ -19,6 +19,18 @@ public class UIManager : MonoSingleton<UIManager>
     public GameObject GameOverWinText;
     public GameObject GameOverLoseText;
 
+    private void OnEnable()
+    {
+        EventManager.Instance.OnNormalLevelStart += SetNormalLevelUI;
+        EventManager.Instance.OnBossLevelStart += SetBossLevelUI;
+    }
+
+    private void OnDisable()
+    {
+        EventManager.Instance.OnNormalLevelStart -= SetNormalLevelUI;
+        EventManager.Instance.OnBossLevelStart -= SetBossLevelUI;
+    }
+
     public void StartGame()
     {
         GameController.Instance.GameState = GameController.GAME_STATE.PLAYING_STATE;
@@ -75,5 +87,15 @@ public class UIManager : MonoSingleton<UIManager>
         {
             PlayerLives[i].SetActive(playerLives > i);
         }
+    }
+
+    private void SetNormalLevelUI()
+    {
+        BossHealthBar.gameObject.SetActive(false);
+    }
+
+    private void SetBossLevelUI()
+    {
+        BossHealthBar.gameObject.SetActive(true);
     }
 }

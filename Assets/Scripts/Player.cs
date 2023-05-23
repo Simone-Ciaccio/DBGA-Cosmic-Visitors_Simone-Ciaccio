@@ -12,6 +12,8 @@ public class Player : MonoBehaviour, IDamageable, IShooter
     public int Health { get; set; }
     public int Damage { get; set; }
 
+    public Vector3 PlayerStartingPosition; 
+
     public GameObject BulletPrefab;
     public Sprite BulletSprite;
     public float TimeBetweenBullets;
@@ -21,8 +23,6 @@ public class Player : MonoBehaviour, IDamageable, IShooter
     private SpriteRenderer bulletRenderer;
     private Vector3 bulletSpawnOffset = Vector3.up;
 
-    private Vector3 startingPosition; 
-
     private void Awake()
     {
         Health = PlayerHealth;
@@ -30,7 +30,7 @@ public class Player : MonoBehaviour, IDamageable, IShooter
         UIManager.Instance.SetInititialPlayerHealth(PlayerHealth);
         UIManager.Instance.UpdatePlayerLives(Lives);
 
-        startingPosition = transform.position;
+        PlayerStartingPosition = transform.position;
 
         bulletRenderer = BulletPrefab.GetComponent<SpriteRenderer>();
         bulletRenderer.sprite = BulletSprite;
@@ -59,7 +59,7 @@ public class Player : MonoBehaviour, IDamageable, IShooter
             Lives--;
             UIManager.Instance.UpdatePlayerLives(Lives);
 
-            transform.position = startingPosition;
+            transform.position = PlayerStartingPosition;
 
             if (Lives <= 0)
                 GameController.Instance.GameState = GameController.GAME_STATE.GAME_OVER_STATE;
