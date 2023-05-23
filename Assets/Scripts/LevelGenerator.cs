@@ -28,6 +28,9 @@ public class LevelGenerator : MonoBehaviour
 
     private void OnEnable()
     {
+        if (EventManager.Instance == null)
+            return;
+
         EventManager.Instance.OnNormalLevelStart += CreateLevel;
         EventManager.Instance.OnBossLevelStart += CreateBossLevel;
     }

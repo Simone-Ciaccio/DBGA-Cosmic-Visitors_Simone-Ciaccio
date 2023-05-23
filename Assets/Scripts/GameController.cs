@@ -26,12 +26,7 @@ public class GameController : MonoSingleton<GameController>
     }
     public GAME_STATE GameState = 0;
 
-    private int currentLevelNumber = 0;
-
-    private void OnEnable()
-    {
-        
-    }
+    [SerializeField]private int currentLevelNumber = 0;
 
     private void Update()
     {
@@ -99,18 +94,18 @@ public class GameController : MonoSingleton<GameController>
 
     private void GamePlaying()
     {
-        EventManager.Instance.GameStarted();
+        //EventManager.Instance.GameStarted();
 
         UIManager.Instance.GameStartPanel.SetActive(false);
         UIManager.Instance.GamePausePanel.SetActive(false);
         UIManager.Instance.InGamePanel.SetActive(true);
 
+        Time.timeScale = 1f;
+        
         if (currentLevelNumber <= 0)
         {
             NextLevel();
         }
-
-        Time.timeScale = 1f;
 
         if (Player.Lives <= 0)
         {
@@ -167,10 +162,10 @@ public class GameController : MonoSingleton<GameController>
         }
         else
         {
+            LevelGenerator.NumOfEnemies = currentLevelNumber + LevelGenerator.NumOfEnemies;
             EventManager.Instance.StartNormalLevelEvent();
             //BossHealthBar.SetActive(false); 
-            LevelGenerator.NumOfEnemies = currentLevelNumber + LevelGenerator.NumOfEnemies;
-            LevelGenerator.CreateLevel();
+            //LevelGenerator.CreateLevel();
         }
     }
 }

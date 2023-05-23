@@ -21,6 +21,9 @@ public class UIManager : MonoSingleton<UIManager>
 
     private void OnEnable()
     {
+        if (EventManager.Instance == null)
+            return;
+
         EventManager.Instance.OnNormalLevelStart += SetNormalLevelUI;
         EventManager.Instance.OnBossLevelStart += SetBossLevelUI;
     }
