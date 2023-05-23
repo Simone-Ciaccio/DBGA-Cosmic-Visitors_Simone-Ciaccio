@@ -29,6 +29,7 @@ public class Bullet : MonoBehaviour
 
         if (bulletDestroyTimer <= 0)
         {
+            GameController.Instance.Bullets.Remove(gameObject);
             Destroy(gameObject);
             bulletDestroyTimer = BulletDestroyTimer;
         }
@@ -46,6 +47,7 @@ public class Bullet : MonoBehaviour
 
                 player.TakeDamage(playerDamage);
 
+                GameController.Instance.Bullets.Remove(gameObject);
                 Destroy(gameObject);
             }
 
@@ -56,6 +58,7 @@ public class Bullet : MonoBehaviour
 
                 enemy.TakeDamage(enemyDamage);
 
+                GameController.Instance.Bullets.Remove(gameObject);
                 Destroy(gameObject);
             }
 
@@ -66,6 +69,7 @@ public class Bullet : MonoBehaviour
 
                 boss.TakeDamage(enemyDamage);
 
+                GameController.Instance.Bullets.Remove(gameObject);
                 Destroy(gameObject);
             }
         }

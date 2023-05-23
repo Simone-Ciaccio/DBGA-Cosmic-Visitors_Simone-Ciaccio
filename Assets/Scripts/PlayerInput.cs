@@ -73,6 +73,10 @@ public class PlayerInput : MonoBehaviour
 
     public void OnPauseActionPerformed(InputAction.CallbackContext context)
     {
-        GameController.Instance.GameState = GameController.GAME_STATE.PAUSE_STATE;
+        if (GameController.Instance.GameState != GameController.GAME_STATE.START_GAME_STATE &&
+            GameController.Instance.GameState != GameController.GAME_STATE.GAME_OVER_STATE)
+        {
+            GameController.Instance.GameState = GameController.GAME_STATE.PAUSE_STATE;
+        }
     }
 }

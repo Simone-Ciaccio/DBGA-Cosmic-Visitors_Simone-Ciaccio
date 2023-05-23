@@ -1309,6 +1309,7 @@ MonoBehaviour:
   LevelGenerator: {fileID: 409670857}
   MaxNumberOfLevels: 10
   Enemies: []
+  Bullets: []
   GameState: 0
 --- !u!1 &804406488
 GameObject:
@@ -2551,7 +2552,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 991059247}
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
-        m_MethodName: StartGame
+        m_MethodName: TryAgain
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

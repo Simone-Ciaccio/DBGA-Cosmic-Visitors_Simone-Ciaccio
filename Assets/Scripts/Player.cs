@@ -61,8 +61,8 @@ public class Player : MonoBehaviour, IDamageable, IShooter
 
             transform.position = startingPosition;
 
-            if(Lives <= 0)
-                Destroy(gameObject);
+            if (Lives <= 0)
+                GameController.Instance.GameState = GameController.GAME_STATE.GAME_OVER_STATE;
         }
     }
 
@@ -74,5 +74,7 @@ public class Player : MonoBehaviour, IDamageable, IShooter
         playerBullet.tag = playerBulletTag;
         Bullet bullet = playerBullet.GetComponent<Bullet>();
         bullet.BulletDirection = Vector3.up;
+
+        GameController.Instance.Bullets.Add(playerBullet);
     }
 }

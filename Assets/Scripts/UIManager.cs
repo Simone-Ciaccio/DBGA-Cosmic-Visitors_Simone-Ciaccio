@@ -39,6 +39,14 @@ public class UIManager : MonoSingleton<UIManager>
         GameController.Instance.GameState = GameController.GAME_STATE.START_GAME_STATE;
     }
 
+    public void TryAgain()
+    {
+        GameController.Instance.InitGameData();
+        GameOverPanel.SetActive(false);
+        InGamePanel.SetActive(true);
+        GameController.Instance.GameState = GameController.GAME_STATE.PLAYING_STATE;
+    }
+
     public void SetInititialPlayerHealth(int maxPlayerHealth)
     {
         PlayerHealthBar.maxValue = maxPlayerHealth;

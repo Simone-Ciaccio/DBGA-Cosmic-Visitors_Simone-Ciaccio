@@ -88,6 +88,8 @@ public class Boss : MonoBehaviour, IDamageable, IShooter
 
             Bullet bullet = bulletGO.GetComponent<Bullet>();
             bullet.SetbulletData(bulletGO, BossScriptable.BossBulletSprite, Vector3.down, angleStep - (i * angleStep));
+
+            GameController.Instance.Bullets.Add(bulletGO);
         }
     }
 

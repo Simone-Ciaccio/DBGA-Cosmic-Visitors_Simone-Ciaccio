@@ -15,6 +15,7 @@ public class GameController : MonoSingleton<GameController>
     public int MaxNumberOfLevels;
 
     public List<GameObject> Enemies = new List<GameObject>();
+    public List<GameObject> Bullets = new List<GameObject>();
 
     public enum GAME_STATE
     {
@@ -23,160 +24,128 @@ public class GameController : MonoSingleton<GameController>
         PAUSE_STATE = 2,
         GAME_OVER_STATE = 3
     }
+    public GAME_STATE GameState = 0;
 
     private int currentLevelNumber = 0;
-
-    public GAME_STATE GameState = 0;
 
     private void Update()
     {
         switch (GameState)
         {
             case GAME_STATE.START_GAME_STATE:
-                Time.timeScale = 0f;
-                currentLevelNumber = 0;
-
-                if (Enemies.Count > 0)
-                {
-                    for (int i = Enemies.Count - 1; i >= 0; i--)
-                    {
-                        Destroy(Enemies[i]);
-                    }
-
-                    Enemies.Clear();
-                }
-
-                UIManager.Instance.GameStartPanel.SetActive(true);
-                UIManager.Instance.InGamePanel.SetActive(false);
-                UIManager.Instance.GamePausePanel.SetActive(false);
-                UIManager.Instance.GameOverPanel.SetActive(false);
+                GameStart();
                 break;
 
             case GAME_STATE.PLAYING_STATE:
-                UIManager.Instance.GameStartPanel.SetActive(false);
-                UIManager.Instance.GamePausePanel.SetActive(false);
-                UIManager.Instance.InGamePanel.SetActive(true);
-
-                if(Enemies.Count <= 0)
-                {
-                    //Cimocs TODO: when player pauses the game, exits and starts again the game should be able to restart from level 1,
-                    //also, if the player dies or reaches the game over panel, the try again button doesn't work and the exit game button lets you get to the
-                    //starting screen but if you start the game the game over panel appears back on the screen.
-                }
-
-                Time.timeScale = 1f;
-
-                if (Player.Lives <= 0)
-                {
-                    GameState = GAME_STATE.GAME_OVER_STATE;
-                }
-
-                if (Enemies.Count <= 0)
-                {
-                    if (currentLevelNumber < MaxNumberOfLevels)
-                    {
-                        NextLevel();
-                    }
-                    else
-                        GameState = GAME_STATE.GAME_OVER_STATE;
-                }
+                GamePlaying();
                 break;
 
             case GAME_STATE.PAUSE_STATE:
-                Time.timeScale = 0f;
-
-                UIManager.Instance.GamePausePanel.SetActive(true);
-                UIManager.Instance.InGamePanel.SetActive(false);
+                GamePaused();
                 break;
 
             case GAME_STATE.GAME_OVER_STATE:
-                Time.timeScale = 0f;
-
-                UIManager.Instance.InGamePanel.SetActive(false);
-                UIManager.Instance.GameOverPanel.SetActive(true);
-
-                if (Enemies.Count <= 0)
-                {
-                    UIManager.Instance.GameOverWinText.SetActive(true);
-                    UIManager.Instance.GameOverLoseText.SetActive(false);
-                }
-                else
-                {
-                    UIManager.Instance.GameOverWinText.SetActive(false);
-                    UIManager.Instance.GameOverLoseText.SetActive(true);
-                }
+                GameOver();
                 break;
         }
     }
 
-    //public void GameStart()
-    //{
-    //    Time.timeScale = 0f;
-    //
-    //    currentLevelNumber = 0;
-    //
-    //    UIManager.Instance.GameStartPanel.SetActive(true);
-    //    UIManager.Instance.InGamePanel.SetActive(false);
-    //    UIManager.Instance.GamePausePanel.SetActive(false);
-    //    UIManager.Instance.GameOverPanel.SetActive(false);
-    //}
-    //
-    //public void PauseGame()
-    //{
-    //    UIManager.Instance.GamePausePanel.SetActive(true);
-    //    UIManager.Instance.InGamePanel.SetActive(false);
-    //
-    //    Time.timeScale = 0f;
-    //}
-    //
-    //public void ResumeGame()
-    //{
-    //    Time.timeScale = 1f;
-    //    UIManager.Instance.GamePausePanel.SetActive(false);
-    //    UIManager.Instance.GameStartPanel.SetActive(false);
-    //    UIManager.Instance.InGamePanel.SetActive(true);
-    //
-    //    GameState = GAME_STATE.PLAYING_STATE;
-    //}
-    //
-    //public void GamePlaying()
-    //{
-    //    Time.timeScale = 1f;
-    //
-    //    if (Player.Lives <= 0)
-    //    {
-    //        GameState = GAME_STATE.GAME_OVER_STATE;
-    //    }
-    //
-    //    if (Enemies.Count <= 0)
-    //    {
-    //        if (currentLevelNumber < MaxNumberOfLevels)
-    //        {
-    //            NextLevel();
-    //        }
-    //        else
-    //            GameState = GAME_STATE.GAME_OVER_STATE;
-    //    }
-    //}
-    //
-    //public void GameOver()
-    //{
-    //    Time.timeScale = 0f;
-    //
-    //    UIManager.Instance.InGamePanel.SetActive(false);
-    //    UIManager.Instance.GameOverPanel.SetActive(true);
-    //
-    //    if(Enemies.Count <= 0)
-    //    {
-    //        UIManager.Instance.GameOverWinText.SetActive(true);
-    //        UIManager.Instance.GameOverLoseText.SetActive(false);
-    //    }
-    //    else
-    //    {
-    //        UIManager.Instance.GameOverWinText.SetActive(false);
-    //        UIManager.Instance.GameOverLoseText.SetActive(true);
-    //    }
-    //}
+    public void InitGameData()
+    {
+        currentLevelNumber = 0;
+
+        Player.Lives = 3;
+
+        if (Enemies.Count > 0)
+        {
+            for (int i = Enemies.Count - 1; i >= 0; i--)
+            {
+                DestroyImmediate(Enemies[i]);
+                Enemies.RemoveAt(i);
+            }
+        }
+
+        if (Bullets.Count > 0)
+        {
+            for (int i = Bullets.Count - 1; i >= 0; i--)
+            {
+                DestroyImmediate(Bullets[i]);
+                Bullets.RemoveAt(i);
+            }
+        }
+
+        LevelGenerator.NumOfEnemies = 5;
+
+        UIManager.Instance.UpdatePlayerLives(Player.Lives);
+        UIManager.Instance.UpdatePlayerHealth(Player.PlayerHealth);
+    }
+
+    private void GameStart()
+    {
+        Time.timeScale = 0f;
+        InitGameData();
+
+        UIManager.Instance.GameStartPanel.SetActive(true);
+        UIManager.Instance.InGamePanel.SetActive(false);
+        UIManager.Instance.GamePausePanel.SetActive(false);
+        UIManager.Instance.GameOverPanel.SetActive(false);
+    }
+
+    private void GamePlaying()
+    {
+        UIManager.Instance.GameStartPanel.SetActive(false);
+        UIManager.Instance.GamePausePanel.SetActive(false);
+        UIManager.Instance.InGamePanel.SetActive(true);
+
+        if (currentLevelNumber <= 0)
+        {
+            NextLevel();
+        }
+
+        Time.timeScale = 1f;
+
+        if (Player.Lives <= 0)
+        {
+            GameState = GAME_STATE.GAME_OVER_STATE;
+        }
+
+        if (Enemies.Count <= 0)
+        {
+            if (currentLevelNumber < MaxNumberOfLevels)
+            {
+                NextLevel();
+            }
+            else
+                GameState = GAME_STATE.GAME_OVER_STATE;
+        }
+    }
+
+    private void GamePaused()
+    {
+        Time.timeScale = 0f;
+
+        UIManager.Instance.GamePausePanel.SetActive(true);
+        UIManager.Instance.InGamePanel.SetActive(false);
+    }
+
+    private void GameOver()
+    {
+        Time.timeScale = 0f;
+
+        UIManager.Instance.InGamePanel.SetActive(false);
+        UIManager.Instance.GameOverPanel.SetActive(true);
+
+        if (Enemies.Count <= 0)
+        {
+            UIManager.Instance.GameOverWinText.SetActive(true);
+            UIManager.Instance.GameOverLoseText.SetActive(false);
+        }
+        else
+        {
+            UIManager.Instance.GameOverWinText.SetActive(false);
+            UIManager.Instance.GameOverLoseText.SetActive(true);
+        }
+    }
 
     private void NextLevel()
     {

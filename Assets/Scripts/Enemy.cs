@@ -116,6 +116,8 @@ public class Enemy : MonoBehaviour, IDamageable, IShooter
             Bullet bullet = bulletGO.GetComponent<Bullet>();
 
             bullet.SetbulletData(bulletGO, EnemyScriptable.EnemyBulletSprite, Vector3.down, angleStep - (i * angleStep));
+
+            GameController.Instance.Bullets.Add(bulletGO);
         }
     }
 
