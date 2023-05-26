@@ -96,7 +96,6 @@ public class Boss : MonoBehaviour, IDamageable, IShooter
             Bullet bullet = bulletGO.GetComponent<Bullet>();
 
             EventManager.Instance.StartBulletSpawnEvent(bulletGO, BossScriptable.BossBulletSprite, Vector3.down, angleStep - (i * angleStep));
-            //bullet.SetbulletData(bulletGO, BossScriptable.BossBulletSprite, Vector3.down, angleStep - (i * angleStep));
 
             EventManager.Instance.StartBulletSpawnIntEvent(BossScriptable.BossDamage);
 

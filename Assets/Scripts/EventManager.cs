@@ -31,6 +31,7 @@ public class EventManager : MonoSingleton<EventManager>
 
     public OnGameGameObjectEvent OnBulletSpawnGO;
     public OnGameGameObjectEvent OnBulletDestroyed;
+    public OnGameGameObjectEvent OnEnemySpawnedGO;
     public OnGameGameObjectEvent OnEnemyDefeated;
 
     public OnGameDamageEvent OnEnemyDamage;
@@ -86,6 +87,11 @@ public class EventManager : MonoSingleton<EventManager>
     public void StartBulletSpawnGOEvent(GameObject GO)
     {
         OnBulletSpawnGO?.Invoke(GO);
+    }
+
+    public void StartEnemySpawnGOEvent(GameObject GO)
+    {
+        OnEnemySpawnedGO?.Invoke(GO);
     }
 
     public void StartEnemyDefeatEvent(GameObject GO)

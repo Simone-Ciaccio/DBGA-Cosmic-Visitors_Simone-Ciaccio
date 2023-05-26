@@ -34,7 +34,7 @@ public class BackgroundMovement : MonoBehaviour
             if (backgroundImages[i].transform.position.y < boundBottom - backgroundImageHeight / 2)
             {
                 backgroundImages[i].transform.position = new Vector3(backgroundImages[i].transform.position.x,
-                    boundTop + backgroundImageHeight / 2 + 0.1f,
+                    boundTop + backgroundImageHeight / 2,
                     backgroundImages[i].transform.position.z);
             }
         }

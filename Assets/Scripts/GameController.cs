@@ -31,6 +31,7 @@ public class GameController : MonoSingleton<GameController>
         EventManager.Instance.OnBulletSpawnGO += AddBulletToList;
         EventManager.Instance.OnBulletDestroyed += RemoveBulletFromList;
 
+        EventManager.Instance.OnEnemySpawnedGO += AddEnemyToList;
         EventManager.Instance.OnEnemyDefeated += RemoveEnemyFromList;
     }
 
@@ -39,6 +40,7 @@ public class GameController : MonoSingleton<GameController>
         EventManager.Instance.OnBulletSpawnGO -= AddBulletToList;
         EventManager.Instance.OnBulletDestroyed -= RemoveBulletFromList;
 
+        EventManager.Instance.OnEnemySpawnedGO -= AddEnemyToList;
         EventManager.Instance.OnEnemyDefeated -= RemoveEnemyFromList;
     }
 
@@ -69,8 +71,6 @@ public class GameController : MonoSingleton<GameController>
         currentLevelNumber = 0;
 
         EventManager.Instance.StartGameReInitEvent();
-        //Player.Lives = 3;
-        //Player.gameObject.transform.position = Player.playerStartingPosition;
 
         if (Enemies.Count > 0)
         {
@@ -210,6 +210,11 @@ public class GameController : MonoSingleton<GameController>
     private void RemoveBulletFromList(GameObject bulletGO)
     {
         Bullets.Remove(bulletGO);
+    }
+
+    private void AddEnemyToList(GameObject enemyGO)
+    {
+        Enemies.Add(enemyGO);
     }
 
     private void RemoveEnemyFromList(GameObject enemyGO)

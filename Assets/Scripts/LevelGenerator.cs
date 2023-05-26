@@ -119,7 +119,7 @@ public class LevelGenerator : MonoSingleton<LevelGenerator>
     {
         GameObject enemyGO = Instantiate(prefab, position, Quaternion.identity);
 
-        GameController.Instance.Enemies.Add(enemyGO);
+        EventManager.Instance.StartEnemySpawnGOEvent(enemyGO);
 
         SpriteRenderer enemyRenderer = enemyGO.GetComponent<SpriteRenderer>();
         Sprite enemySprite = enemyRenderer.sprite;

@@ -104,6 +104,8 @@ public class Enemy : MonoBehaviour, IDamageable, IShooter
         {
             Health -= damage;
 
+            spriteRenderer.color = Color.magenta;
+
             if (Health <= 0)
             {
                 EventManager.Instance.StartEnemyDefeatEvent(gameObject);
@@ -128,7 +130,6 @@ public class Enemy : MonoBehaviour, IDamageable, IShooter
             EventManager.Instance.StartBulletSpawnIntEvent(EnemyScriptable.EnemyDamage);
 
             EventManager.Instance.StartBulletSpawnEvent(bulletGO, EnemyScriptable.EnemyBulletSprite, Vector3.down, angleStep - (i * angleStep));
-            //bullet.SetbulletData(bulletGO, EnemyScriptable.EnemyBulletSprite, Vector3.down, angleStep - (i * angleStep));
 
             EventManager.Instance.StartBulletSpawnGOEvent(bulletGO);
         }
