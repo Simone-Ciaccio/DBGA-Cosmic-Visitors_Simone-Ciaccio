@@ -12,7 +12,7 @@ public class Player : MonoBehaviour, IDamageable, IShooter
     public int Health { get; set; }
     public int Damage { get; set; }
 
-    public Vector3 PlayerStartingPosition; 
+    private Vector3 playerStartingPosition;
 
     public GameObject BulletPrefab;
     public Sprite BulletSprite;
@@ -27,13 +27,26 @@ public class Player : MonoBehaviour, IDamageable, IShooter
     {
         Health = PlayerHealth;
         Damage = PlayerDamage;
-        UIManager.Instance.SetInititialPlayerHealth(PlayerHealth);
-        UIManager.Instance.UpdatePlayerLives(Lives);
 
-        PlayerStartingPosition = transform.position;
+        EventManager.Instance.StartInitPlayerHealthEvent(Health);
+        EventManager.Instance.StartInitPlayerLivesEvent(Lives);
+
+        playerStartingPosition = transform.position;
 
         bulletRenderer = BulletPrefab.GetComponent<SpriteRenderer>();
         bulletRenderer.sprite = BulletSprite;
+    }
+
+    private void Start()
+    {
+        EventManager.Instance.OnGameReInit += ResetPlayerData;
+        EventManager.Instance.OnPlayerDamage += TakeDamage;
+    }
+
+    private void OnDisable()
+    {
+        EventManager.Instance.OnGameReInit -= ResetPlayerData;
+        EventManager.Instance.OnPlayerDamage -= TakeDamage;
     }
 
     private void Update()
@@ -45,24 +58,27 @@ public class Player : MonoBehaviour, IDamageable, IShooter
         }
     }
 
-    public void TakeDamage(int damage)
+    public void TakeDamage(GameObject damagedObject, int damage)
     {
-        Health -= damage;
-
-        UIManager.Instance.UpdatePlayerHealth(Health);
-
-        if (Health <= 0)
+        if (gameObject == damagedObject)
         {
-            Health = PlayerHealth;
-            UIManager.Instance.UpdatePlayerHealth(PlayerHealth);
+            Health -= damage;
 
-            Lives--;
-            UIManager.Instance.UpdatePlayerLives(Lives);
+            EventManager.Instance.StartUpdatePlayerHealthEvent(Health);
 
-            transform.position = PlayerStartingPosition;
+            if (Health <= 0)
+            {
+                Health = PlayerHealth;
+                EventManager.Instance.StartUpdatePlayerHealthEvent(Health);
 
-            if (Lives <= 0)
-                GameController.Instance.GameState = GameController.GAME_STATE.GAME_OVER_STATE;
+                Lives--;
+                EventManager.Instance.StartUpdatePlayerLivesEvent(Lives);
+
+                transform.position = playerStartingPosition;
+
+                if (Lives <= 0)
+                    GameController.Instance.GameState = GameController.GAME_STATE.GAME_OVER_STATE;
+            }
         }
     }
 
@@ -75,6 +91,13 @@ public class Player : MonoBehaviour, IDamageable, IShooter
         Bullet bullet = playerBullet.GetComponent<Bullet>();
         bullet.BulletDirection = Vector3.up;
 
-        GameController.Instance.Bullets.Add(playerBullet);
+        EventManager.Instance.StartBulletSpawnIntEvent(Damage);
+        EventManager.Instance.StartBulletSpawnGOEvent(playerBullet);
+    }
+
+    private void ResetPlayerData()
+    {
+        Lives = 3;
+        transform.position = playerStartingPosition;
     }
 }

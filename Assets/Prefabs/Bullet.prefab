@@ -100,8 +100,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   BulletDirection: {x: 0, y: 1, z: 0}
   BulletSprite: {fileID: 0}
-  BulletSpeed: 9
-  BulletDestroyTimer: 1
+  BulletSpeed: 8
+  BulletDestroyTimer: 1.5
 --- !u!60 &5656413162585106083
 PolygonCollider2D:
   m_ObjectHideFlags: 0

@@ -19,77 +19,97 @@ public class UIManager : MonoSingleton<UIManager>
     public GameObject GameOverWinText;
     public GameObject GameOverLoseText;
 
-    private void OnEnable()
+    private void Start()
     {
-        if (EventManager.Instance == null)
-            return;
+        EventManager.Instance.OnInitPlayerHealth += SetInitialPlayerHealth;
+        EventManager.Instance.OnInitPlayerLives += UpdatePlayerLives;
 
+        EventManager.Instance.OnUpdatePlayerLives += UpdatePlayerLives;
+        EventManager.Instance.OnUpdatePlayerHealth += UpdatePlayerHealth;
+
+        EventManager.Instance.OnInitBossHealth += SetInitialBossHealth;
+        EventManager.Instance.OnUpdateBossHealth += UpdateBossHealth;
+
+        EventManager.Instance.OnGameStart += SetInitialGameUI;
+        EventManager.Instance.OnGamePlaying += SetGamePlayingUI;
+        EventManager.Instance.OnGamePause += SetGamePauseUI;
         EventManager.Instance.OnNormalLevelStart += SetNormalLevelUI;
         EventManager.Instance.OnBossLevelStart += SetBossLevelUI;
+        EventManager.Instance.OnGameOver += SetGameOverUI;
+        EventManager.Instance.OnGameOverWin += SetGameOverWinText;
+        EventManager.Instance.OnGameOverLose += SetGameOverLoseText;
     }
 
     private void OnDisable()
     {
+        EventManager.Instance.OnInitPlayerHealth -= SetInitialPlayerHealth;
+        EventManager.Instance.OnInitPlayerLives -= UpdatePlayerLives;
+
+        EventManager.Instance.OnUpdatePlayerLives -= UpdatePlayerLives;
+        EventManager.Instance.OnUpdatePlayerHealth -= UpdatePlayerHealth;
+
+        EventManager.Instance.OnInitBossHealth -= SetInitialBossHealth;
+        EventManager.Instance.OnUpdateBossHealth -= UpdateBossHealth;
+
+        EventManager.Instance.OnGameStart -= SetInitialGameUI;
+        EventManager.Instance.OnGamePlaying -= SetGamePlayingUI;
+        EventManager.Instance.OnGamePause -= SetGamePauseUI;
         EventManager.Instance.OnNormalLevelStart -= SetNormalLevelUI;
         EventManager.Instance.OnBossLevelStart -= SetBossLevelUI;
+        EventManager.Instance.OnGameOver -= SetGameOverUI;
+        EventManager.Instance.OnGameOverWin -= SetGameOverWinText;
+        EventManager.Instance.OnGameOverLose -= SetGameOverLoseText;
     }
 
-    public void StartGame()
-    {
-        GameController.Instance.GameState = GameController.GAME_STATE.PLAYING_STATE;
-    }
-
-    public void PauseGame()
-    {
-        GameController.Instance.GameState = GameController.GAME_STATE.PAUSE_STATE;
-    }
-
-    public void ResumeGame()
-    {
-        GameController.Instance.GameState = GameController.GAME_STATE.PLAYING_STATE;
-    }
-
-    public void ExitGame()
-    {
-        GameController.Instance.GameState = GameController.GAME_STATE.START_GAME_STATE;
-    }
-
-    public void TryAgain()
-    {
-        GameController.Instance.InitGameData();
-        GameOverPanel.SetActive(false);
-        InGamePanel.SetActive(true);
-        GameController.Instance.GameState = GameController.GAME_STATE.PLAYING_STATE;
-    }
-
-    public void SetInititialPlayerHealth(int maxPlayerHealth)
+    private void SetInitialPlayerHealth(int maxPlayerHealth)
     {
         PlayerHealthBar.maxValue = maxPlayerHealth;
         PlayerHealthBar.value = maxPlayerHealth;
     }
 
-    public void UpdatePlayerHealth(int currentHealth)
+    private void UpdatePlayerHealth(int currentHealth)
     {
         PlayerHealthBar.value = currentHealth;
     }
 
-    public void SetInititialBossHealth(int maxBossHealth)
+    private void SetInitialBossHealth(int maxBossHealth)
     {
         BossHealthBar.maxValue = maxBossHealth;
         BossHealthBar.value = maxBossHealth;
     }
 
-    public void UpdateBossHealth(int currentHealth)
+    private void UpdateBossHealth(int currentHealth)
     {
         BossHealthBar.value = currentHealth;
     }
 
-    public void UpdatePlayerLives(int playerLives)
+    private void UpdatePlayerLives(int playerLives)
     {
         for (int i = PlayerLives.Count - 1; i >= 0; i--)
         {
             PlayerLives[i].SetActive(playerLives > i);
         }
+    }
+
+    private void SetInitialGameUI()
+    {
+        GameStartPanel.SetActive(true);
+        InGamePanel.SetActive(false);
+        GamePausePanel.SetActive(false);
+        GameOverPanel.SetActive(false);
+    }
+
+    private void SetGamePlayingUI()
+    {
+        GameStartPanel.SetActive(false);
+        GamePausePanel.SetActive(false);
+        InGamePanel.SetActive(true);
+    }
+
+    private void SetGamePauseUI()
+    {
+        GamePausePanel.SetActive(true);
+        InGamePanel.SetActive(false);
     }
 
     private void SetNormalLevelUI()
@@ -100,5 +120,23 @@ public class UIManager : MonoSingleton<UIManager>
     private void SetBossLevelUI()
     {
         BossHealthBar.gameObject.SetActive(true);
+    }
+
+    private void SetGameOverUI()
+    {
+        InGamePanel.SetActive(false);
+        GameOverPanel.SetActive(true);
+    }
+
+    private void SetGameOverWinText()
+    {
+        GameOverWinText.SetActive(true);
+        GameOverLoseText.SetActive(false);
+    }
+
+    private void SetGameOverLoseText()
+    {
+        GameOverWinText.SetActive(false);
+        GameOverLoseText.SetActive(true);
     }
 }

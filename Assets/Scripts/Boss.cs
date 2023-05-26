@@ -9,15 +9,15 @@ public class Boss : MonoBehaviour, IDamageable, IShooter
 
     public float speed;
 
+    public GameObject BossPrefab;
+    public BossScriptable BossScriptable;
+
     private enum BOSS_MOVE_STATE
     {
         NO_MOVE = -1,
         MOVE_RIGHT = 0,
         MOVE_LEFT = 1
     }
-
-    public GameObject BossPrefab;
-    public BossScriptable BossScriptable;
 
     private BOSS_MOVE_STATE moveState = 0;
 
@@ -49,7 +49,6 @@ public class Boss : MonoBehaviour, IDamageable, IShooter
 
     private void Start()
     {
-        UIManager.Instance.SetInititialBossHealth(BossScriptable.BossHealth);
         
         SpriteRenderer bossRenderer = BossPrefab.GetComponent<SpriteRenderer>();
         bossRenderer.sprite = BossScriptable.BossSprite;
@@ -61,6 +60,14 @@ public class Boss : MonoBehaviour, IDamageable, IShooter
         shotMaxAngle = BossScriptable.MaxShotAngle;
         numberOfBullets = BossScriptable.NumberOfBullets;
         bulletPrefab = BossScriptable.BossBulletPrefab;
+
+        EventManager.Instance.StartInitBossHealthIntEvent(Health);
+        EventManager.Instance.OnEnemyDamage += TakeDamage;
+    }
+
+    private void OnDisable()
+    {
+        EventManager.Instance.OnEnemyDamage -= TakeDamage;
     }
 
     void Update()
@@ -87,21 +94,28 @@ public class Boss : MonoBehaviour, IDamageable, IShooter
             bulletGO.tag = enemyBulletTag;
 
             Bullet bullet = bulletGO.GetComponent<Bullet>();
-            bullet.SetbulletData(bulletGO, BossScriptable.BossBulletSprite, Vector3.down, angleStep - (i * angleStep));
 
-            GameController.Instance.Bullets.Add(bulletGO);
+            EventManager.Instance.StartBulletSpawnEvent(bulletGO, BossScriptable.BossBulletSprite, Vector3.down, angleStep - (i * angleStep));
+            //bullet.SetbulletData(bulletGO, BossScriptable.BossBulletSprite, Vector3.down, angleStep - (i * angleStep));
+
+            EventManager.Instance.StartBulletSpawnIntEvent(BossScriptable.BossDamage);
+
+            EventManager.Instance.StartBulletSpawnGOEvent(bulletGO);
         }
     }
 
-    public void TakeDamage(int damage)
+    public void TakeDamage(GameObject damagedObject, int damage)
     {
-        Health -= damage;
-        UIManager.Instance.UpdateBossHealth(Health);
-
-        if (Health <= 0)
+        if (gameObject == damagedObject)
         {
-            GameController.Instance.Enemies.Remove(gameObject);
-            Destroy(gameObject);
+            Health -= damage;
+            EventManager.Instance.StartUpdateBossHealthIntEvent(Health);
+
+            if (Health <= 0)
+            {
+                EventManager.Instance.StartEnemyDefeatEvent(gameObject);
+                Destroy(gameObject);
+            }
         }
     }
 

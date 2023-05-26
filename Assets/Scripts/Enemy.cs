@@ -73,6 +73,13 @@ public class Enemy : MonoBehaviour, IDamageable, IShooter
         shotMinAngle = EnemyScriptable.MinShotAngle;
         shotMaxAngle = EnemyScriptable.MaxShotAngle;
         timeBetweenShots = EnemyScriptable.TimeBetweenShots;
+
+        EventManager.Instance.OnEnemyDamage += TakeDamage;
+    }
+
+    private void OnDisable()
+    {
+        EventManager.Instance.OnEnemyDamage -= TakeDamage;
     }
 
     private void Update()
@@ -91,14 +98,17 @@ public class Enemy : MonoBehaviour, IDamageable, IShooter
         }
     }
 
-    public void TakeDamage(int damage)
+    public void TakeDamage(GameObject damagedObject, int damage)
     {
-        Health -= damage;
-
-        if (Health <= 0)
+        if (gameObject == damagedObject)
         {
-            GameController.Instance.Enemies.Remove(gameObject);
-            Destroy(gameObject);
+            Health -= damage;
+
+            if (Health <= 0)
+            {
+                EventManager.Instance.StartEnemyDefeatEvent(gameObject);
+                Destroy(gameObject);
+            }
         }
     }
 
@@ -115,9 +125,12 @@ public class Enemy : MonoBehaviour, IDamageable, IShooter
 
             Bullet bullet = bulletGO.GetComponent<Bullet>();
 
-            bullet.SetbulletData(bulletGO, EnemyScriptable.EnemyBulletSprite, Vector3.down, angleStep - (i * angleStep));
+            EventManager.Instance.StartBulletSpawnIntEvent(EnemyScriptable.EnemyDamage);
 
-            GameController.Instance.Bullets.Add(bulletGO);
+            EventManager.Instance.StartBulletSpawnEvent(bulletGO, EnemyScriptable.EnemyBulletSprite, Vector3.down, angleStep - (i * angleStep));
+            //bullet.SetbulletData(bulletGO, EnemyScriptable.EnemyBulletSprite, Vector3.down, angleStep - (i * angleStep));
+
+            EventManager.Instance.StartBulletSpawnGOEvent(bulletGO);
         }
     }
 

@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.Controls;
 
 public class PlayerInput : MonoBehaviour
 {
@@ -71,7 +70,7 @@ public class PlayerInput : MonoBehaviour
         input = 0;
     }
 
-    public void OnPauseActionPerformed(InputAction.CallbackContext context)
+    private void OnPauseActionPerformed(InputAction.CallbackContext context)
     {
         if (GameController.Instance.GameState != GameController.GAME_STATE.START_GAME_STATE &&
             GameController.Instance.GameState != GameController.GAME_STATE.GAME_OVER_STATE)

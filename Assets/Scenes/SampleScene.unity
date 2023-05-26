@@ -185,8 +185,8 @@ MonoBehaviour:
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 0.6313726, g: 1, b: 0.3529412, a: 1}
-    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_HighlightedColor: {r: 0.47791457, g: 0.7830189, b: 0.2474635, a: 1}
+    m_PressedColor: {r: 0.2679245, g: 0.6226415, b: 0, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
@@ -207,8 +207,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 991059247}
-        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+      - m_Target: {fileID: 793651445}
+        m_TargetAssemblyTypeName: GameController, Assembly-CSharp
         m_MethodName: ResumeGame
         m_Mode: 1
         m_Arguments:
@@ -1303,9 +1303,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Player: {fileID: 2113104068}
-  Boss: {fileID: 2481275108197580887, guid: 4ba7777bfa3416b4c82847ca18181097, type: 3}
-  BossScriptable: {fileID: 11400000, guid: 6dcf4ce21ed74b548becd61dac85ae45, type: 2}
-  BossHealthBar: {fileID: 994305426}
   LevelGenerator: {fileID: 409670857}
   MaxNumberOfLevels: 10
   Enemies: []
@@ -1508,8 +1505,8 @@ MonoBehaviour:
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 0.35691524, b: 0.35294116, a: 1}
-    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_HighlightedColor: {r: 0.8113208, g: 0.25216353, b: 0.24875402, a: 1}
+    m_PressedColor: {r: 0.735849, g: 0.15280753, b: 0.1492524, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
@@ -1530,8 +1527,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 991059247}
-        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+      - m_Target: {fileID: 793651445}
+        m_TargetAssemblyTypeName: GameController, Assembly-CSharp
         m_MethodName: ExitGame
         m_Mode: 1
         m_Arguments:
@@ -2572,8 +2569,8 @@ MonoBehaviour:
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 0.6313726, g: 1, b: 0.3529412, a: 1}
-    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_HighlightedColor: {r: 0.47843137, g: 0.78431374, b: 0.24705882, a: 1}
+    m_PressedColor: {r: 0.26666668, g: 0.62352943, b: 0, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
@@ -2594,8 +2591,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 991059247}
-        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+      - m_Target: {fileID: 793651445}
+        m_TargetAssemblyTypeName: GameController, Assembly-CSharp
         m_MethodName: TryAgain
         m_Mode: 1
         m_Arguments:
@@ -2706,7 +2703,7 @@ MonoBehaviour:
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 0.6311632, g: 1, b: 0.3537736, a: 1}
-    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_HighlightedColor: {r: 0.4646968, g: 0.754717, b: 0.24563903, a: 1}
     m_PressedColor: {r: 0.14983088, g: 0.3490566, b: 0, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
@@ -2728,8 +2725,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 991059247}
-        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+      - m_Target: {fileID: 793651445}
+        m_TargetAssemblyTypeName: GameController, Assembly-CSharp
         m_MethodName: StartGame
         m_Mode: 1
         m_Arguments:
@@ -2840,8 +2837,8 @@ MonoBehaviour:
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 0.35691524, b: 0.35294116, a: 1}
-    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_HighlightedColor: {r: 0.8117647, g: 0.2509804, b: 0.24705882, a: 1}
+    m_PressedColor: {r: 0.7372549, g: 0.15294118, b: 0.14901961, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
@@ -2862,8 +2859,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 991059247}
-        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+      - m_Target: {fileID: 793651445}
+        m_TargetAssemblyTypeName: GameController, Assembly-CSharp
         m_MethodName: ExitGame
         m_Mode: 1
         m_Arguments:
@@ -4427,7 +4424,6 @@ MonoBehaviour:
   Lives: 3
   PlayerHealth: 15
   PlayerDamage: 1
-  PlayerStartingPosition: {x: 0, y: 0, z: 0}
   BulletPrefab: {fileID: 1009538351760812735, guid: 19737653c1799df41a90f357216a744e, type: 3}
   BulletSprite: {fileID: 1791733142, guid: f706babab9dc9b249a8b05fb523216ca, type: 3}
   TimeBetweenBullets: 0.4
@@ -4492,7 +4488,7 @@ Transform:
   m_GameObject: {fileID: 2113104066}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: -3.27, z: 0}
-  m_LocalScale: {x: 0.15, y: 0.15, z: 0.15}
+  m_LocalScale: {x: 0.13, y: 0.13, z: 0.13}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
@@ -4572,7 +4568,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a11a2c3a9c58702469c0feb3fadb7abb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MoveSpeed: 7
+  MoveSpeed: 8
   MoveAction:
     m_Name: Move
     m_Type: 0

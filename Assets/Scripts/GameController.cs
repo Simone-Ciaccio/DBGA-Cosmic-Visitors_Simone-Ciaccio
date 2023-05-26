@@ -5,10 +5,6 @@ using UnityEngine;
 public class GameController : MonoSingleton<GameController>
 {
     public Player Player;
-    public GameObject Boss;
-    public BossScriptable BossScriptable;
-
-    public GameObject BossHealthBar;
 
     public LevelGenerator LevelGenerator;
 
@@ -26,7 +22,25 @@ public class GameController : MonoSingleton<GameController>
     }
     public GAME_STATE GameState = 0;
 
-    [SerializeField]private int currentLevelNumber = 0;
+    private int currentLevelNumber = 0;
+
+    private bool isPlayingLevel = false;
+
+    private void Start()
+    {
+        EventManager.Instance.OnBulletSpawnGO += AddBulletToList;
+        EventManager.Instance.OnBulletDestroyed += RemoveBulletFromList;
+
+        EventManager.Instance.OnEnemyDefeated += RemoveEnemyFromList;
+    }
+
+    private void OnDisable()
+    {
+        EventManager.Instance.OnBulletSpawnGO -= AddBulletToList;
+        EventManager.Instance.OnBulletDestroyed -= RemoveBulletFromList;
+
+        EventManager.Instance.OnEnemyDefeated -= RemoveEnemyFromList;
+    }
 
     private void Update()
     {
@@ -50,12 +64,13 @@ public class GameController : MonoSingleton<GameController>
         }
     }
 
-    public void InitGameData()
+    private void InitGameData()
     {
         currentLevelNumber = 0;
 
-        Player.Lives = 3;
-        Player.gameObject.transform.position = Player.PlayerStartingPosition;
+        EventManager.Instance.StartGameReInitEvent();
+        //Player.Lives = 3;
+        //Player.gameObject.transform.position = Player.playerStartingPosition;
 
         if (Enemies.Count > 0)
         {
@@ -77,8 +92,36 @@ public class GameController : MonoSingleton<GameController>
 
         LevelGenerator.NumOfEnemies = 5;
 
-        UIManager.Instance.UpdatePlayerLives(Player.Lives);
-        UIManager.Instance.UpdatePlayerHealth(Player.PlayerHealth);
+        EventManager.Instance.StartInitPlayerLivesEvent(Player.Lives);
+        EventManager.Instance.StartInitPlayerHealthEvent(Player.PlayerHealth);
+    }
+
+    public void StartGame()
+    {
+        GameState = GAME_STATE.PLAYING_STATE;
+    }
+
+    public void PauseGame()
+    {
+        GameState = GAME_STATE.PAUSE_STATE;
+    }
+
+    public void ResumeGame()
+    {
+        GameState = GAME_STATE.PLAYING_STATE;
+    }
+
+    public void ExitGame()
+    {
+        GameState = GAME_STATE.START_GAME_STATE;
+    }
+
+    public void TryAgain()
+    {
+        InitGameData();
+        UIManager.Instance.GameOverPanel.SetActive(false);
+        UIManager.Instance.InGamePanel.SetActive(true);
+        GameState = GAME_STATE.PLAYING_STATE;
     }
 
     private void GameStart()
@@ -86,26 +129,14 @@ public class GameController : MonoSingleton<GameController>
         Time.timeScale = 0f;
         InitGameData();
 
-        UIManager.Instance.GameStartPanel.SetActive(true);
-        UIManager.Instance.InGamePanel.SetActive(false);
-        UIManager.Instance.GamePausePanel.SetActive(false);
-        UIManager.Instance.GameOverPanel.SetActive(false);
+        EventManager.Instance.StartGameStartEvent();
     }
 
     private void GamePlaying()
     {
-        //EventManager.Instance.GameStarted();
-
-        UIManager.Instance.GameStartPanel.SetActive(false);
-        UIManager.Instance.GamePausePanel.SetActive(false);
-        UIManager.Instance.InGamePanel.SetActive(true);
+        EventManager.Instance.StartGamePlayingEvent();
 
         Time.timeScale = 1f;
-        
-        if (currentLevelNumber <= 0)
-        {
-            NextLevel();
-        }
 
         if (Player.Lives <= 0)
         {
@@ -114,12 +145,37 @@ public class GameController : MonoSingleton<GameController>
 
         if (Enemies.Count <= 0)
         {
+            isPlayingLevel = false;
+
             if (currentLevelNumber < MaxNumberOfLevels)
             {
                 NextLevel();
             }
             else
+            {
                 GameState = GAME_STATE.GAME_OVER_STATE;
+                return;
+            }
+        }
+    }
+
+    private void NextLevel()
+    {
+        if (isPlayingLevel == false)
+        {
+            currentLevelNumber++;
+        }
+
+        if (currentLevelNumber % 5 == 0)
+        {
+            EventManager.Instance.StartBossLevelEvent();
+            isPlayingLevel = true;
+        }
+        else
+        {
+            LevelGenerator.NumOfEnemies = currentLevelNumber + LevelGenerator.NumOfEnemies;
+            EventManager.Instance.StartNormalLevelEvent();
+            isPlayingLevel = true;
         }
     }
 
@@ -127,45 +183,37 @@ public class GameController : MonoSingleton<GameController>
     {
         Time.timeScale = 0f;
 
-        UIManager.Instance.GamePausePanel.SetActive(true);
-        UIManager.Instance.InGamePanel.SetActive(false);
+        EventManager.Instance.StartGamePauseEvent();
     }
 
     private void GameOver()
     {
         Time.timeScale = 0f;
 
-        UIManager.Instance.InGamePanel.SetActive(false);
-        UIManager.Instance.GameOverPanel.SetActive(true);
+        EventManager.Instance.StartGameOverEvent();
 
         if (Enemies.Count <= 0)
         {
-            UIManager.Instance.GameOverWinText.SetActive(true);
-            UIManager.Instance.GameOverLoseText.SetActive(false);
+            EventManager.Instance.StartGameOverWinEvent();
         }
         else
         {
-            UIManager.Instance.GameOverWinText.SetActive(false);
-            UIManager.Instance.GameOverLoseText.SetActive(true);
+            EventManager.Instance.StartGameOverLoseEvent();
         }
     }
 
-    private void NextLevel()
+    private void AddBulletToList(GameObject bulletGO)
     {
-        currentLevelNumber++;
+        Bullets.Add(bulletGO);
+    }
 
-        if (currentLevelNumber % 5 == 0)
-        {
-            EventManager.Instance.StartBossLevelEvent();
-            //BossHealthBar.SetActive(true);
-            //LevelGenerator.CreateBossLevel();
-        }
-        else
-        {
-            LevelGenerator.NumOfEnemies = currentLevelNumber + LevelGenerator.NumOfEnemies;
-            EventManager.Instance.StartNormalLevelEvent();
-            //BossHealthBar.SetActive(false); 
-            //LevelGenerator.CreateLevel();
-        }
+    private void RemoveBulletFromList(GameObject bulletGO)
+    {
+        Bullets.Remove(bulletGO);
+    }
+
+    private void RemoveEnemyFromList(GameObject enemyGO)
+    {
+        Enemies.Remove(enemyGO);
     }
 }

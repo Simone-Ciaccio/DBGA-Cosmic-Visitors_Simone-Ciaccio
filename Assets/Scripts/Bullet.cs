@@ -9,6 +9,7 @@ public class Bullet : MonoBehaviour
     public float BulletSpeed;
     public float BulletDestroyTimer;
 
+    private int bulletDamage;
     private float bulletDestroyTimer;
     private string enemyTag = "Enemy";
     private string enemyBulletTag = "EnemyBullet";
@@ -21,6 +22,18 @@ public class Bullet : MonoBehaviour
         bulletDestroyTimer = BulletDestroyTimer;
     }
 
+    private void Start()
+    {
+        EventManager.Instance.OnBulletSpawn += SetbulletData;
+        EventManager.Instance.OnBulletSpawnInt += SetBulletDamage;
+    }
+
+    private void OnDisable()
+    {
+        EventManager.Instance.OnBulletSpawn -= SetbulletData;
+        EventManager.Instance.OnBulletSpawnInt -= SetBulletDamage;
+    }
+
     private void Update()
     {
         bulletDestroyTimer -= Time.deltaTime;
@@ -29,7 +42,7 @@ public class Bullet : MonoBehaviour
 
         if (bulletDestroyTimer <= 0)
         {
-            GameController.Instance.Bullets.Remove(gameObject);
+            EventManager.Instance.StartBulletDestroyedEvent(gameObject);
             Destroy(gameObject);
             bulletDestroyTimer = BulletDestroyTimer;
         }
@@ -40,48 +53,35 @@ public class Bullet : MonoBehaviour
         RaycastHit2D[] hits = Physics2D.RaycastAll(transform.position, new Vector2(BulletDirection.x, BulletDirection.y), 0.1f);
         foreach (RaycastHit2D hit in hits)
         {
+            Physics2D.IgnoreCollision(GetComponent<Collider2D>(), hit.collider, true);
+
             if (hit.collider.gameObject.CompareTag(playerTag) && this.CompareTag(enemyBulletTag))
             {
-                Player player = hit.collider.GetComponent<Player>();
-                int playerDamage = player.PlayerDamage;
+                EventManager.Instance.StartPlayerDamageEvent(hit.collider.gameObject, bulletDamage);
 
-                player.TakeDamage(playerDamage);
-
-                GameController.Instance.Bullets.Remove(gameObject);
+                EventManager.Instance.StartBulletDestroyedEvent(gameObject);
                 Destroy(gameObject);
             }
 
             if (hit.collider.gameObject.CompareTag(enemyTag) && this.CompareTag(playerBulletTag))
             {
-                Enemy enemy = hit.collider.GetComponent<Enemy>();
-                int enemyDamage = enemy.EnemyScriptable.EnemyDamage;
+                EventManager.Instance.StartEnemyDamageEvent(hit.collider.gameObject, bulletDamage);
 
-                enemy.TakeDamage(enemyDamage);
-
-                GameController.Instance.Bullets.Remove(gameObject);
+                EventManager.Instance.StartBulletDestroyedEvent(gameObject);
                 Destroy(gameObject);
             }
 
-            if (hit.collider.gameObject.CompareTag(bossTag) && this.CompareTag(playerBulletTag))
+            if(hit.collider.gameObject.CompareTag(bossTag) && this.CompareTag(playerBulletTag))
             {
-                Boss boss = hit.collider.GetComponent<Boss>();
-                int enemyDamage = boss.BossScriptable.BossDamage;
+                EventManager.Instance.StartEnemyDamageEvent(hit.collider.gameObject, bulletDamage);
 
-                boss.TakeDamage(enemyDamage);
-
-                GameController.Instance.Bullets.Remove(gameObject);
+                EventManager.Instance.StartBulletDestroyedEvent(gameObject);
                 Destroy(gameObject);
             }
         }
     }
 
-    public void SetBulletDirection(Vector3 generalDirection, float angle)
-    {
-        Vector3 bulletDirection = Quaternion.Euler(0, 0, angle) * generalDirection;
-        BulletDirection = bulletDirection;
-    }
-
-    public void SetbulletData(GameObject bulletGO, Sprite bulletSprite, Vector3 generalDirection, float angleToShoot)
+    private void SetbulletData(GameObject bulletGO, Sprite bulletSprite, Vector3 generalDirection, float angleToShoot)
     {
         SpriteRenderer bulletRenderer = bulletGO.GetComponent<SpriteRenderer>();
         bulletRenderer.sprite = bulletSprite;
@@ -90,5 +90,16 @@ public class Bullet : MonoBehaviour
 
         Bullet bullet = bulletGO.GetComponent<Bullet>();
         bullet.SetBulletDirection(generalDirection, angleToShoot);
+    }
+
+    private void SetBulletDirection(Vector3 generalDirection, float angle)
+    {
+        Vector3 bulletDirection = Quaternion.Euler(0, 0, angle) * generalDirection;
+        BulletDirection = bulletDirection;
+    }
+
+    private void SetBulletDamage(int damageAmount)
+    {
+        bulletDamage = damageAmount;
     }
 }

@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class LevelGenerator : MonoBehaviour
+public class LevelGenerator : MonoSingleton<LevelGenerator>
 {
     public GameObject EnemyPrefab;
     public GameObject BossPrefab;
 
     public int NumOfEnemies;
 
-    public const char EMPTY = '-';
-    public const char ENEMY = '+';
+    private const char EMPTY = '-';
+    private const char ENEMY = '+';
 
     private Camera cam;
 
@@ -26,23 +26,10 @@ public class LevelGenerator : MonoBehaviour
 
     private Dictionary<Vector2, char> tiles = new Dictionary<Vector2, char>();
 
-    private void OnEnable()
+    protected override void Awake()
     {
-        if (EventManager.Instance == null)
-            return;
+        base.Awake();
 
-        EventManager.Instance.OnNormalLevelStart += CreateLevel;
-        EventManager.Instance.OnBossLevelStart += CreateBossLevel;
-    }
-
-    private void OnDisable()
-    {
-        EventManager.Instance.OnNormalLevelStart -= CreateLevel;
-        EventManager.Instance.OnBossLevelStart -= CreateBossLevel;
-    }
-
-    private void Awake()
-    {
         cam = Camera.main;
 
         boundRight = Helper.GetScreenBoundRight(cam);
@@ -54,7 +41,19 @@ public class LevelGenerator : MonoBehaviour
         enemySpriteSize = new Vector2(enemySpriteRenderer.bounds.size.x, enemySpriteRenderer.bounds.size.y);
     }
 
-    public void CreateLevel()
+    private void Start()
+    {
+        EventManager.Instance.OnNormalLevelStart += CreateLevel;
+        EventManager.Instance.OnBossLevelStart += CreateBossLevel;
+    }
+
+    private void OnDisable()
+    {
+        EventManager.Instance.OnNormalLevelStart -= CreateLevel;
+        EventManager.Instance.OnBossLevelStart -= CreateBossLevel;
+    }
+
+    private void CreateLevel()
     {
         currentNumOfEnemies = 0;
 
@@ -110,7 +109,7 @@ public class LevelGenerator : MonoBehaviour
         return tile;
     }
 
-    public void CreateBossLevel()
+    private void CreateBossLevel()
     {
         Vector3 spawnPosition = new Vector3((boundRight / 2), boundTop, 0);
         SpawnEnemy(BossPrefab, spawnPosition);

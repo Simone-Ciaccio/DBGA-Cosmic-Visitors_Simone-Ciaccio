@@ -5,17 +5,47 @@ using UnityEngine;
 public class EventManager : MonoSingleton<EventManager>
 {
     public delegate void OnGameEvent();
-    public delegate int OnGameIntEvent();
+    public delegate void OnGameIntEvent(int value);
+    public delegate void OnGameGameObjectEvent(GameObject GO);
+    public delegate void OnGameDamageEvent(GameObject GO, int amount);
+
+    public delegate void OnBulletSpawnEvent(GameObject GO, Sprite sprite, Vector3 generalDirection, float angleToShoot);
 
     public OnGameEvent OnGameStart;
+    public OnGameEvent OnGamePlaying;
     public OnGameEvent OnNormalLevelStart;
     public OnGameEvent OnBossLevelStart;
+    public OnGameEvent OnGamePause;
+    public OnGameEvent OnGameOver;
+    public OnGameEvent OnGameOverWin;
+    public OnGameEvent OnGameOverLose;
+    public OnGameEvent OnGameReInit;
 
-    public OnGameIntEvent OnLevelStartInt;
+    public OnGameIntEvent OnInitPlayerHealth;
+    public OnGameIntEvent OnInitPlayerLives;
+    public OnGameIntEvent OnInitBossHealth;
+    public OnGameIntEvent OnUpdatePlayerLives;
+    public OnGameIntEvent OnUpdatePlayerHealth;
+    public OnGameIntEvent OnUpdateBossHealth;
+    public OnGameIntEvent OnBulletSpawnInt;
 
-    public void GameStarted()
+    public OnGameGameObjectEvent OnBulletSpawnGO;
+    public OnGameGameObjectEvent OnBulletDestroyed;
+    public OnGameGameObjectEvent OnEnemyDefeated;
+
+    public OnGameDamageEvent OnEnemyDamage;
+    public OnGameDamageEvent OnPlayerDamage;
+
+    public OnBulletSpawnEvent OnBulletSpawn;
+
+    public void StartGameStartEvent()
     {
         OnGameStart?.Invoke();
+    }
+
+    public void StartGamePlayingEvent()
+    {
+        OnGamePlaying?.Invoke();
     }
 
     public void StartNormalLevelEvent()
@@ -28,8 +58,92 @@ public class EventManager : MonoSingleton<EventManager>
         OnBossLevelStart?.Invoke();
     }
 
-    public void StartLevelIntEvent()
+    public void StartGamePauseEvent()
     {
-        OnLevelStartInt?.Invoke();
+        OnGamePause?.Invoke();
+    }
+
+    public void StartGameOverEvent()
+    {
+        OnGameOver?.Invoke();
+    }
+
+    public void StartGameOverWinEvent()
+    {
+        OnGameOverWin?.Invoke();
+    }
+
+    public void StartGameOverLoseEvent()
+    {
+        OnGameOverLose?.Invoke();
+    }
+
+    public void StartGameReInitEvent()
+    {
+        OnGameReInit?.Invoke();
+    }
+
+    public void StartBulletSpawnGOEvent(GameObject GO)
+    {
+        OnBulletSpawnGO?.Invoke(GO);
+    }
+
+    public void StartEnemyDefeatEvent(GameObject GO)
+    {
+        OnEnemyDefeated?.Invoke(GO);
+    }
+
+    public void StartBulletDestroyedEvent(GameObject GO)
+    {
+        OnBulletDestroyed?.Invoke(GO);
+    }
+    public void StartUpdatePlayerLivesEvent(int value)
+    {
+        OnUpdatePlayerLives?.Invoke(value);
+    }
+
+    public void StartUpdatePlayerHealthEvent(int value)
+    {
+        OnUpdatePlayerHealth?.Invoke(value);
+    }
+
+    public void StartUpdateBossHealthIntEvent(int value)
+    {
+        OnUpdateBossHealth?.Invoke(value);
+    }
+
+    public void StartBulletSpawnIntEvent(int value)
+    {
+        OnBulletSpawnInt?.Invoke(value);
+    }
+
+    public void StartInitPlayerHealthEvent(int value)
+    {
+        OnInitPlayerHealth?.Invoke(value);
+    }
+
+    public void StartInitPlayerLivesEvent(int value)
+    {
+        OnInitPlayerLives?.Invoke(value);
+    }
+
+    public void StartInitBossHealthIntEvent(int value)
+    {
+        OnInitBossHealth?.Invoke(value);
+    }
+
+    public void StartEnemyDamageEvent(GameObject GO, int amount)
+    {
+        OnEnemyDamage?.Invoke(GO, amount);
+    }
+
+    public void StartPlayerDamageEvent(GameObject GO, int amount)
+    {
+        OnPlayerDamage?.Invoke(GO, amount);
+    }
+
+    public void StartBulletSpawnEvent(GameObject GO, Sprite sprite, Vector3 generalDirection, float angleToShoot)
+    {
+        OnBulletSpawn?.Invoke(GO, sprite, generalDirection, angleToShoot);
     }
 }
