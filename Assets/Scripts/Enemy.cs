@@ -11,6 +11,8 @@ public class Enemy : MonoBehaviour, IDamageable, IShooter
     public List<EnemyScriptable> Enemies = new List<EnemyScriptable>();
     public GameObject bulletPrefab;
     public EnemyScriptable EnemyScriptable;
+    public AudioClip ShotAudio;
+    public AudioClip DestroyAudio;
 
     private Camera cam;
     private Player player;
@@ -36,6 +38,7 @@ public class Enemy : MonoBehaviour, IDamageable, IShooter
     private string enemyBulletTag = "EnemyBullet";
 
     private SpriteRenderer spriteRenderer;
+    private AudioSource audioSource;
 
     private enum ENEMY_MOVE_STATE
     {
@@ -50,6 +53,8 @@ public class Enemy : MonoBehaviour, IDamageable, IShooter
         player = FindObjectOfType<Player>();
 
         cam = Camera.main;
+
+        audioSource = GetComponent<AudioSource>();
 
         boundRight = Helper.GetScreenBoundRight(cam);
         boundLeft = Helper.GetScreenBoundLeft(cam);
@@ -108,6 +113,7 @@ public class Enemy : MonoBehaviour, IDamageable, IShooter
 
             if (Health <= 0)
             {
+                EventManager.Instance.StartEnemyDefeatedAudioEvent(DestroyAudio);
                 EventManager.Instance.StartEnemyDefeatEvent(gameObject);
                 Destroy(gameObject);
             }
@@ -129,10 +135,12 @@ public class Enemy : MonoBehaviour, IDamageable, IShooter
 
             EventManager.Instance.StartBulletSpawnIntEvent(EnemyScriptable.EnemyDamage);
 
-            EventManager.Instance.StartBulletSpawnEvent(bulletGO, EnemyScriptable.EnemyBulletSprite, Vector3.down, angleStep - (i * angleStep));
+            EventManager.Instance.StartBulletSpawnConstructorEvent(bulletGO, EnemyScriptable.EnemyBulletSprite, Vector3.down, angleStep - (i * angleStep));
 
             EventManager.Instance.StartBulletSpawnGOEvent(bulletGO);
         }
+
+        EventManager.Instance.StartBulletSpawnAudioEvent(ShotAudio);
     }
 
     private void Move()

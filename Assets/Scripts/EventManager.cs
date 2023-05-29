@@ -8,6 +8,7 @@ public class EventManager : MonoSingleton<EventManager>
     public delegate void OnGameIntEvent(int value);
     public delegate void OnGameGameObjectEvent(GameObject GO);
     public delegate void OnGameDamageEvent(GameObject GO, int amount);
+    public delegate void OnGameAudioEvent(AudioClip audioClip);
 
     public delegate void OnBulletSpawnEvent(GameObject GO, Sprite sprite, Vector3 generalDirection, float angleToShoot);
 
@@ -37,7 +38,12 @@ public class EventManager : MonoSingleton<EventManager>
     public OnGameDamageEvent OnEnemyDamage;
     public OnGameDamageEvent OnPlayerDamage;
 
-    public OnBulletSpawnEvent OnBulletSpawn;
+    public OnGameAudioEvent OnBulletSpawnAudio;
+    public OnGameAudioEvent OnEnemyDefeatedAudio;
+    public OnGameAudioEvent OnBossDefeatedAudio;
+    public OnGameAudioEvent OnPlayerDefeatedAudio;
+
+    public OnBulletSpawnEvent OnBulletSpawnConstructor;
 
     public void StartGameStartEvent()
     {
@@ -83,6 +89,7 @@ public class EventManager : MonoSingleton<EventManager>
     {
         OnGameReInit?.Invoke();
     }
+
 
     public void StartBulletSpawnGOEvent(GameObject GO)
     {
@@ -148,8 +155,28 @@ public class EventManager : MonoSingleton<EventManager>
         OnPlayerDamage?.Invoke(GO, amount);
     }
 
-    public void StartBulletSpawnEvent(GameObject GO, Sprite sprite, Vector3 generalDirection, float angleToShoot)
+    public void StartBulletSpawnAudioEvent(AudioClip audioClip)
     {
-        OnBulletSpawn?.Invoke(GO, sprite, generalDirection, angleToShoot);
+        OnBulletSpawnAudio?.Invoke(audioClip);
+    }
+
+    public void StartEnemyDefeatedAudioEvent(AudioClip audioClip)
+    {
+        OnEnemyDefeatedAudio?.Invoke(audioClip);
+    }
+
+    public void StartBossDefeatedAudioEvent(AudioClip audioClip)
+    {
+        OnBossDefeatedAudio?.Invoke(audioClip);
+    }
+
+    public void StartPlayerDefeatedAudioEvent(AudioClip audioClip)
+    {
+        OnPlayerDefeatedAudio?.Invoke(audioClip);
+    }
+
+    public void StartBulletSpawnConstructorEvent(GameObject GO, Sprite sprite, Vector3 generalDirection, float angleToShoot)
+    {
+        OnBulletSpawnConstructor?.Invoke(GO, sprite, generalDirection, angleToShoot);
     }
 }

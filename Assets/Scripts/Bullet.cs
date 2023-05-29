@@ -24,13 +24,13 @@ public class Bullet : MonoBehaviour
 
     private void Start()
     {
-        EventManager.Instance.OnBulletSpawn += SetbulletData;
+        EventManager.Instance.OnBulletSpawnConstructor += SetbulletData;
         EventManager.Instance.OnBulletSpawnInt += SetBulletDamage;
     }
 
     private void OnDisable()
     {
-        EventManager.Instance.OnBulletSpawn -= SetbulletData;
+        EventManager.Instance.OnBulletSpawnConstructor -= SetbulletData;
         EventManager.Instance.OnBulletSpawnInt -= SetBulletDamage;
     }
 

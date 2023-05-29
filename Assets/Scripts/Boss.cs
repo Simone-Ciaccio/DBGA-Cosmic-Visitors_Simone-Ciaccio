@@ -12,6 +12,9 @@ public class Boss : MonoBehaviour, IDamageable, IShooter
     public GameObject BossPrefab;
     public BossScriptable BossScriptable;
 
+    public AudioClip ShotAudio;
+    public AudioClip DestroySound;
+
     private enum BOSS_MOVE_STATE
     {
         NO_MOVE = -1,
@@ -95,12 +98,14 @@ public class Boss : MonoBehaviour, IDamageable, IShooter
 
             Bullet bullet = bulletGO.GetComponent<Bullet>();
 
-            EventManager.Instance.StartBulletSpawnEvent(bulletGO, BossScriptable.BossBulletSprite, Vector3.down, angleStep - (i * angleStep));
+            EventManager.Instance.StartBulletSpawnConstructorEvent(bulletGO, BossScriptable.BossBulletSprite, Vector3.down, angleStep - (i * angleStep));
 
             EventManager.Instance.StartBulletSpawnIntEvent(BossScriptable.BossDamage);
 
             EventManager.Instance.StartBulletSpawnGOEvent(bulletGO);
         }
+
+        EventManager.Instance.StartBulletSpawnAudioEvent(ShotAudio);
     }
 
     public void TakeDamage(GameObject damagedObject, int damage)
@@ -112,6 +117,7 @@ public class Boss : MonoBehaviour, IDamageable, IShooter
 
             if (Health <= 0)
             {
+                EventManager.Instance.StartBossDefeatedAudioEvent(DestroySound);
                 EventManager.Instance.StartEnemyDefeatEvent(gameObject);
                 Destroy(gameObject);
             }

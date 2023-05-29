@@ -51,6 +51,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: b6ad85638eeb21847ace96b995ef2a39, type: 2}
   bulletPrefab: {fileID: 1009538351760812735, guid: 19737653c1799df41a90f357216a744e, type: 3}
   EnemyScriptable: {fileID: 11400000, guid: b6ad85638eeb21847ace96b995ef2a39, type: 2}
+  ShotAudio: {fileID: 8300000, guid: 557a6624398da40499122fda9db78a35, type: 3}
+  DestroyAudio: {fileID: 8300000, guid: 398d57dda01375f4d8ba51872cfa9b50, type: 3}
 --- !u!212 &790615873503631264
 SpriteRenderer:
   m_ObjectHideFlags: 0

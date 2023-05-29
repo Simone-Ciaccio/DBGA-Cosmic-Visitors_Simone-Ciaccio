@@ -9,6 +9,9 @@ public class Player : MonoBehaviour, IDamageable, IShooter
     public int PlayerHealth;
     public int PlayerDamage;
 
+    public AudioClip ShotAudio;
+    public AudioClip DestroySound;
+
     public int Health { get; set; }
     public int Damage { get; set; }
 
@@ -68,6 +71,8 @@ public class Player : MonoBehaviour, IDamageable, IShooter
 
             if (Health <= 0)
             {
+                EventManager.Instance.StartPlayerDefeatedAudioEvent(DestroySound);
+
                 Health = PlayerHealth;
                 EventManager.Instance.StartUpdatePlayerHealthEvent(Health);
 
@@ -93,6 +98,7 @@ public class Player : MonoBehaviour, IDamageable, IShooter
 
         EventManager.Instance.StartBulletSpawnIntEvent(Damage);
         EventManager.Instance.StartBulletSpawnGOEvent(playerBullet);
+        EventManager.Instance.StartBulletSpawnAudioEvent(ShotAudio);
     }
 
     private void ResetPlayerData()

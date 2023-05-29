@@ -49,6 +49,8 @@ MonoBehaviour:
   speed: 3
   BossPrefab: {fileID: 2481275108197580887}
   BossScriptable: {fileID: 11400000, guid: 6dcf4ce21ed74b548becd61dac85ae45, type: 2}
+  ShotAudio: {fileID: 8300000, guid: 557a6624398da40499122fda9db78a35, type: 3}
+  DestroySound: {fileID: 8300000, guid: 21147e610ad730d4eb6d78e542b2872d, type: 3}
 --- !u!212 &882910621734003956
 SpriteRenderer:
   m_ObjectHideFlags: 0
